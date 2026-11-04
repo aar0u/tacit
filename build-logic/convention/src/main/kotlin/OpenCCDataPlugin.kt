@@ -9,6 +9,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -40,6 +41,7 @@ class OpenCCDataPlugin : Plugin<Project> {
         val task =
             project.tasks.register<InstallOpenCCDataTask>(INSTALL_TASK) {
                 inputDir.set(project.dataBaseDir)
+                extraDir.set(project.file("data/rime/rime-ice/opencc"))
                 outputDir.set(project.dataInstallDir)
             }
         // make sure OpenCC data have been installed before generating data checksums
@@ -64,6 +66,12 @@ class OpenCCDataPlugin : Plugin<Project> {
         @get:PathSensitive(PathSensitivity.RELATIVE)
         @get:InputDirectory
         abstract val inputDir: DirectoryProperty
+
+        // rime-ice's emoji dictionaries, copied next to OpenCC's own files
+        @get:Optional
+        @get:PathSensitive(PathSensitivity.RELATIVE)
+        @get:InputDirectory
+        abstract val extraDir: DirectoryProperty
 
         @get:OutputDirectory
         abstract val outputDir: DirectoryProperty
@@ -126,6 +134,8 @@ class OpenCCDataPlugin : Plugin<Project> {
                     else -> unpackaged += name
                 }
             }
+            extraDir.orNull?.asFile?.takeIf { it.isDirectory }?.copyRecursively(output, overwrite = true)
+
             check(unpackaged.isEmpty()) {
                 "OpenCC configs refer to dictionaries which are not packaged:\n" +
                     unpackaged.joinToString("\n") { "  $it" } +

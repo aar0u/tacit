@@ -35,3 +35,6 @@
 [submodule "essay"]
 	path = app/data/rime/essay
 	url = https://github.com/rime/rime-essay
+[submodule "app/data/rime/rime-ice"]
+	path = app/data/rime/rime-ice
+	url = https://github.com/iDvel/rime-ice
