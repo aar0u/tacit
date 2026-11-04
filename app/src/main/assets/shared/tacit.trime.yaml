@@ -312,7 +312,55 @@ preset_color_schemes:
     enter_key_back_color: 0x8e6f64
     enter_key_text_color: 0xffffff
 
+# The bar above the keys: menu, hide, emoji, clipboard history, cursor and selection
+# keys, voice and the Chinese/English switch. Icons come from the bundled icon font.
+tool_bar:
+  button_spacing: 6
+  button_font: iconfont.ttf
+  back_style: "ic@arrow-left"
+  primary_button:
+    background:
+      type: circle
+      normal: 0x00
+      highlight: hilited_candidate_back_color
+      vertical_inset: 4
+      horizontal_inset: 4
+    foreground:
+      style: "ic@dots_horizontal"
+      normal: candidate_text_color
+      padding: 10
+    action: menu_keyboard
+    long_press_action: Settings
+  buttons:
+    - foreground: {style: "ic@keyboard_close", normal: candidate_text_color}
+      action: Hide
+    - foreground: {style: "ic@emoticon", normal: candidate_text_color}
+      action: liquid_keyboard_emoji
+    - foreground: {style: "ic@clipboard", normal: candidate_text_color}
+      action: clipboard_window
+    - foreground: {style: "ic@cursor_text", normal: candidate_text_color}
+      action: Keyboard_editor
+    - foreground: {option_styles: ["ic@microphone_off", "ic@microphone"], normal: candidate_text_color}
+      action: VOICE_ASSIST
+    - foreground: {option_styles: ["中", "En"], font_size: 18, padding: 10, normal: candidate_text_color}
+      action: Mode_switch
+
 preset_keys:
+  # Keys of the editor keyboard (cursor movement, selection, clipboard operations).
+  Keyboard_editor: {label: 编辑, functional: false, send: Eisu_toggle, select: editor}
+  space1: {label: 空格, repeatable: false, functional: false, send: space}
+  Left: {label: '←', send: Left, repeatable: true, functional: false}
+  Right: {label: '→', send: Right, repeatable: true, functional: false}
+  Up: {label: '↑', send: Up, repeatable: true, functional: false}
+  Down: {label: '↓', send: Down, repeatable: true, functional: false}
+  Left1: {label: '⇦', send: Control+Left, repeatable: true, functional: false}
+  Right1: {label: '⇨', send: Control+Right, repeatable: true, functional: false}
+  Home: {label: 行首, send: Home}
+  End: {label: 行尾, send: End}
+  Shift_L2: {label: 选择, preview: '⇪', functional: false, send: Shift_L}
+  Tab1: {label: Tab, functional: false, send: Tab}
+  undo: {label: 撤销, send: Control+z}
+  redo: {label: 重做, send: Control+Shift+z}
   # The voice key shows its state through the runtime option _voice_input, which
   # VoiceDictation sets whenever recording starts or stops.
   VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, states: [ 语音关, 语音开 ]}
@@ -391,6 +439,32 @@ preset_keyboards:
     - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Mode_switch, long_click: Menu, width: 11, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+  editor:
+    name: 编辑
+    ascii_mode: 1
+    width: 20
+    height: 62
+    keys:
+    - {click: select_all}
+    - {click: Left1}
+    - {click: Up}
+    - {click: Right1}
+    - {click: BackSpace, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: cut}
+    - {click: Left}
+    - {click: Shift_L2, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Right}
+    - {click: space1, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: copy}
+    - {click: Home}
+    - {click: Down}
+    - {click: End}
+    - {click: Return, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+    - {click: paste}
+    - {click: undo}
+    - {click: Tab1}
+    - {click: redo}
+    - {click: Keyboard_default, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
   # Same as the base symbols layout, without the key that opened the theme list, and with
   # Simplified labels (via the preset keys above).
   symbols:
