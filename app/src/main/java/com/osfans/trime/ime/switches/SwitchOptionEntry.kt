@@ -19,7 +19,8 @@ sealed class SwitchOptionEntry(
             SchemaList,
             UpdateConfig,
             Keyboard,
-            ThemeList,
+            ColorList,
+            DarkMode,
         }
     }
 

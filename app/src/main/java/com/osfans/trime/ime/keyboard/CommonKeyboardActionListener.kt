@@ -144,7 +144,8 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                         KeyEvent.KEYCODE_SETTINGS -> handleSettings(action)
                         KeyEvent.KEYCODE_PROG_RED -> showColorPicker()
                         KeyEvent.KEYCODE_MENU -> showEnabledSchemaPicker()
-                        KeyEvent.KEYCODE_VOICE_ASSIST -> VoiceDictation.toggle(service)
+                        KeyEvent.KEYCODE_VOICE_ASSIST ->
+                            if (action.option == "hold") VoiceDictation.startHold(service) else VoiceDictation.toggle(service)
                         else -> handleDefaultKeyAction(action)
                     }
                 }
@@ -313,7 +314,7 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
 
             private fun handleSettings(action: KeyAction) {
                 when (action.option) {
-                    "theme" -> showThemePicker()
+                    "theme" -> showColorPicker()
                     "color" -> showColorPicker()
                     "schema" -> AppUtils.launchMainToSchemaList(context)
                     "sound" -> showSoundEffectPicker()

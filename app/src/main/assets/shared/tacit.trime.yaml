@@ -313,17 +313,28 @@ preset_color_schemes:
     enter_key_text_color: 0xffffff
 
 preset_keys:
-  VOICE_ASSIST: {label: 语音, send: VOICE_ASSIST}
+  # The voice key shows its state through the runtime option _voice_input, which
+  # VoiceDictation sets whenever recording starts or stops.
+  VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, states: [ 语音关, 语音开 ]}
+  # Long press on the space bar: record while held.
+  VOICE_HOLD: {send: VOICE_ASSIST, option: hold}
+  space: {label: ' ', repeatable: false, functional: false, send: space}
+  Shift_L: {label: ⇧, send: Shift_L, shift_lock: ascii_long}
+  Return: {label: ↵, send: Return}
+  Return1: {label: ↵, send: Return}
   Hide: {label: 隐藏, send: BACK}
-  BackSpace: {label: 退格, repeatable: true, send: BackSpace}
+  BackSpace: {label: ⌫, repeatable: true, send: BackSpace}
+  Clear: {label: 清空, text: "{Control+a}{BackSpace}"}
+  Delete: {label: 删除, send: Delete}
   select_all: {label: 全选, send: Control+a}
   cut: {label: 剪切, send: Control+x}
   copy: {label: 复制, send: Control+c}
   paste: {label: 粘贴, send: Control+v}
   CommitComment: {label: 编码, send: Control+Shift+Return}
-  Mode_switch: {toggle: ascii_mode, send: SWITCH_CHARSET, states: [ 中文, 英文 ]}
-  Keyboard_symbols: {label: 符号, send: Eisu_toggle, select: symbols}
-  Keyboard_number: {label: 数字, send: Eisu_toggle, select: number}
+  Mode_switch: {toggle: ascii_mode, send: SWITCH_CHARSET, states: [ 中, EN ]}
+  Keyboard_symbols: {label: '!@#', send: Eisu_toggle, select: symbols}
+  Keyboard_number: {label: '123', send: Eisu_toggle, select: number}
+  Keyboard_default: {label: 返回, send: Eisu_toggle, select: .default}
   Menu: {label: 方案, send: MENU}
   Date: {label: 日期, command: date, option: "yyyy-MM-dd"}
   Time: {label: 时间, command: date, option: "HH:mm:ss"}
@@ -371,11 +382,66 @@ preset_keyboards:
     - {click: 'b', long_click: Time, swipe_up: Date}
     - {click: 'n', long_click: '"'}
     - {click: 'm', long_click: "'"}
-    - {click: BackSpace, swipe_left: Escape, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Mode_switch, long_click: Menu, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Keyboard_symbols, long_click: Keyboard_number, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: ',', long_click: '<'}
-    - {click: space, width: 30}
-    - {click: '.', long_click: '>'}
-    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Keyboard_symbols, width: 9, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Keyboard_number, width: 9, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: ',', long_click: '<', width: 9}
+    - {click: space, long_click: VOICE_HOLD, width: 28}
+    - {click: '.', long_click: '>', width: 9}
+    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Mode_switch, long_click: Menu, width: 11, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+  # Same as the base symbols layout, without the key that opened the theme list, and with
+  # Simplified labels (via the preset keys above).
+  symbols:
+    name: 符号
+    ascii_mode: 1
+    width: 10
+    height: 56
+    keys:
+    - {click: '1'}
+    - {click: '2'}
+    - {click: '3'}
+    - {click: '4'}
+    - {click: '5'}
+    - {click: '6'}
+    - {click: '7'}
+    - {click: '8'}
+    - {click: '9'}
+    - {click: '0'}
+    - {click: '~',long_click: '`'}
+    - {click: '!'}
+    - {click: '@'}
+    - {click: '#'}
+    - {click: '$'}
+    - {click: '￥'}
+    - {click: '%'}
+    - {click: '^'}
+    - {click: '&'}
+    - {click: '*'}
+    - {click: '(', long_click: '{'}
+    - {click: ')', long_click: '}'}
+    - {click: '[', long_click: '【'}
+    - {click: ']', long_click: '】'}
+    - {click: '「', long_click: '『'}
+    - {click: '」', long_click: '』'}
+    - {click: '、', ascii: '\', long_click: '|'}
+    - {click: '/', long_click: '√'}
+    - {click: ':'}
+    - {click: ';'}
+    - {click: '+'}
+    - {click: '-', long_click: '_'}
+    - {click: '='}
+    - {click: '〈', long_click: '《', ascii: '<'}
+    - {click: '〉', long_click: '》', ascii: '>'}
+    - {click: '“', ascii: '"', long_click: '‘'}
+    - {click: '”', ascii: "'", long_click: '’'}
+    - {click: '，', ascii: ',', long_click: one_hand_switch_1}
+    - {click: '？', ascii: '?', long_click: one_hand_switch_3}
+    - {click: BackSpace, long_click: Clear, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Keyboard_default, long_click: Menu, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Keyboard_number, long_click: Color_switch, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: space, width: 30}
+    - {click: '。', ascii: '.', width: 12}
+    - {click: liquid_keyboard_switch, long_click: Delete, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Return, long_click: select_all, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

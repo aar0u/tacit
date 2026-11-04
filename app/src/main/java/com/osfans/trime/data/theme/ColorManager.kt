@@ -120,9 +120,16 @@ object ColorManager {
     private fun resolveActiveScheme(theme: Theme): ColorScheme = ColorSchemeResolver.resolve(
         schemes = theme.presetColorSchemes,
         selectedSchemeId = prefs.normalModeColor.getValue(),
-        followSystemDayNight = prefs.followSystemDayNight.getValue(),
-        isNightMode = isNightMode,
+        followSystemDayNight = true,
+        isNightMode = when (prefs.darkMode.getValue()) {
+            ThemePrefs.DarkMode.LIGHT -> false
+            ThemePrefs.DarkMode.DARK -> true
+            ThemePrefs.DarkMode.SYSTEM -> isNightMode
+        },
     )
+
+    /** Re-applies the colors after the dark mode preference changed. */
+    fun refresh() = activateScheme(notify = true)
 
     /**
      * Re-resolves the active scheme from the prefs and current theme, or

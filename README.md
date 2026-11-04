@@ -33,7 +33,7 @@ English | [简体中文](README_sc.md)
 
 ## Voice input
 
-Voice runs inside the keyboard process, so the engine stays loaded and the microphone key (bottom row, where `/` was) starts recording at once. The first start after the process is created loads the model, which takes about 11 seconds. The keyboard asks for the microphone permission the first time you press the key. It still has no `INTERNET` permission, so audio cannot leave the device. The engine is released when Android asks for memory back (about half a gigabyte while loaded).
+Voice runs inside the keyboard process, so the engine stays loaded so recording starts at once. Two ways to use it: hold the space bar and speak, and the text is typed after you let go and pause; or tap the voice key (bottom row, shows 语音开 or 语音关) to start and tap again to stop. The first start after the process is created loads the model, which takes about 11 seconds. The keyboard asks for the microphone permission the first time you press the key. It still has no `INTERNET` permission, so audio cannot leave the device. The engine is released when Android asks for memory back (about half a gigabyte while loaded).
 
 Speech is cut into sentences by a VAD and each sentence is recognized in one pass. In a desktop comparison on 753 sentences of spoken Mandarin, X-ASR had a character error rate of 5.8%, 3.9% and 8.9% on three talks, against 6.9%, 4.9% and 11.1% for the streaming Zipformer model. On the test phone the whole pipeline ran at 0.19 times real time, and loading the model took about 11 seconds after pre-optimizing the encoder. The cost is that text appears after you pause, not while you speak.
 

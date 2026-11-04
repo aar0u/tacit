@@ -14,6 +14,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.view.KeyEvent
+import com.aar0u.tacit.voice.VoiceDictation
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.sizeDp
 import com.osfans.trime.data.theme.Theme
@@ -90,6 +91,7 @@ class KeyView(
         onRelease = { behavior, isFromLongPress ->
             Timber.d("KeyView release: label=${key.getLabel()}, behavior=$behavior, fromLongPress=$isFromLongPress")
             if (isFromLongPress) {
+                VoiceDictation.releaseHold()
                 if (hasPopup) {
                     val triggerAction = PopupAction.TriggerAction(id)
                     popup.listener.onPopupAction(triggerAction)
@@ -174,6 +176,7 @@ class KeyView(
         }
 
         onCancel = {
+            VoiceDictation.releaseHold()
             deletedTextBuffer.clear()
             setPressedState(false)
             dismissPopupPreview()

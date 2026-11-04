@@ -39,6 +39,10 @@ object VoiceDictation {
     @Volatile private var recording = false
     private var loading = false
     private var startWhenReady = false
+    private var holding = false
+
+    /** Called on the main thread whenever recording starts or stops; drives the key's on/off label. */
+    var onStateChanged: ((Boolean) -> Unit)? = null
     private var captureThread: Thread? = null
     private var target = WeakReference<TrimeInputMethodService>(null)
 
@@ -91,10 +95,29 @@ object VoiceDictation {
         }
     }
 
+    /** Long press on the space bar: record while the key is held. */
+    fun startHold(service: TrimeInputMethodService) {
+        holding = true
+        if (!recording) toggle(service)
+    }
+
+    /** The space bar was released after [startHold]. A no-op for any other long press. */
+    fun releaseHold() {
+        if (!holding) return
+        stop()
+    }
+
     /** Ends recording; the sentence still being spoken is finished and typed. */
     fun stop() {
         startWhenReady = false
-        recording = false
+        holding = false
+        setRecording(false)
+    }
+
+    private fun setRecording(on: Boolean) {
+        if (recording == on) return
+        recording = on
+        onStateChanged?.invoke(on)
     }
 
     /** Frees the engine (about half a gigabyte) when the system is short of memory. */
@@ -128,7 +151,7 @@ object VoiceDictation {
             toast(service, service.getString(R.string.voice_mic_busy))
             return
         }
-        recording = true
+        setRecording(true)
         toast(service, service.getString(R.string.voice_listening))
         captureThread = Thread({ capture(recorder, active) }, "tacit-voice-capture").also { it.start() }
     }

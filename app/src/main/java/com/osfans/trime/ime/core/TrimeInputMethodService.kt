@@ -42,6 +42,7 @@ import com.osfans.trime.core.RimeKeyMapping
 import com.osfans.trime.core.RimeMessage
 import com.osfans.trime.daemon.RimeDaemon
 import com.osfans.trime.daemon.RimeSession
+import com.osfans.trime.daemon.launchOnReady
 import com.osfans.trime.data.prefs.AppPrefs
 import com.osfans.trime.data.prefs.PreferenceDelegate
 import com.osfans.trime.data.prefs.PreferenceDelegateProvider
@@ -195,6 +196,12 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
             it.registerOnChangeListener(recreateInputViewListener)
         }
         prefs.candidates.registerOnChangeListener(recreateCandidatesViewListener)
+        // The voice key shows its on/off state through this Rime option.
+        VoiceDictation.onStateChanged = { on ->
+            rime.launchOnReady { api ->
+                lifecycleScope.launch { api.setRuntimeOption("_voice_input", on) }
+            }
+        }
         // ensure theme and color managers are initialized after rime is ready
         lifecycleScope.launch {
             rime.runOnReady {
@@ -337,6 +344,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
     }
 
     override fun onDestroy() {
+        VoiceDictation.onStateChanged = null
         VoiceDictation.release()
         InputFeedbackManager.destroy()
         inputView = null

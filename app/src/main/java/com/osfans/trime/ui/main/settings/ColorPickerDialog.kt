@@ -18,9 +18,11 @@ object ColorPickerDialog {
         context: Context,
         afterConfirm: (suspend () -> Unit)? = null,
     ): AlertDialog {
-        val presetSchemes = ThemeManager.activeTheme.presetColorSchemes.entries.toList()
-        val currentScheme = ColorManager.activeColorScheme
-        val currentIndex = presetSchemes.indexOfFirst { it.value == currentScheme }
+        // Dark variants are reached through the dark mode setting, not picked directly.
+        val presetSchemes = ThemeManager.activeTheme.presetColorSchemes.entries
+            .filter { "light_scheme" !in it.value }
+        val selectedId = ThemeManager.prefs.normalModeColor.getValue()
+        val currentIndex = presetSchemes.indexOfFirst { it.key == selectedId }
         return AlertDialog
             .Builder(context)
             .apply {

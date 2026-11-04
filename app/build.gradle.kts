@@ -74,9 +74,8 @@ android {
             resValue("string", "trime_app_name", "@string/app_name_release")
         }
         debug {
-            applicationIdSuffix = ".debug"
-
-            resValue("string", "trime_app_name", "@string/app_name_debug")
+            // Same id and name as a release, so the installed debug build is the app you would ship.
+            resValue("string", "trime_app_name", "@string/app_name_release")
         }
         all {
             // remove META-INF/version-control-info.textproto

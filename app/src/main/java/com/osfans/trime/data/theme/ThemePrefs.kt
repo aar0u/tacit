@@ -64,7 +64,19 @@ class ThemePrefs(
             true,
         )
 
+    enum class DarkMode(
+        override val stringRes: Int,
+    ) : PreferenceDelegateEnum {
+        SYSTEM(R.string.dark_mode_system),
+        LIGHT(R.string.dark_mode_light),
+        DARK(R.string.dark_mode_dark),
+    }
+
+    /** Lets the user pick light or dark regardless of the system setting. */
+    val darkMode = enum(R.string.dark_mode, DARK_MODE, DarkMode.SYSTEM)
+
     companion object {
+        const val DARK_MODE = "dark_mode"
         const val SELECTED_THEME = "selected_theme"
         const val NORMAL_MODE_COLOR = "normal_mode_color"
         const val FOLLOW_SYSTEM_DAY_NIGHT = "follow_system_day_night"

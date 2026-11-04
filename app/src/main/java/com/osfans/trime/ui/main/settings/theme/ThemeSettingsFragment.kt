@@ -26,6 +26,8 @@ class ThemeSettingsFragment : PreferenceDelegateFragment(ThemeManager.prefs) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         // Tacit has a single theme, so there is nothing to pick.
         findPreference<Preference>("selected_theme")?.isVisible = false
+        // Replaced by the three-way dark mode setting.
+        findPreference<Preference>("follow_system_day_night")?.isVisible = false
         findPreference<Preference>("normal_mode_color")?.setOnPreferenceClickListener {
             lifecycleScope.launch { ColorPickerDialog.build(lifecycleScope, requireContext()).show() }
             true
