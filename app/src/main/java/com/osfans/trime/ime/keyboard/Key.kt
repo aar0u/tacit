@@ -7,6 +7,7 @@ package com.osfans.trime.ime.keyboard
 import android.graphics.drawable.Drawable
 import android.view.KeyEvent
 import androidx.annotation.ColorInt
+import com.aar0u.tacit.voice.VoiceDictation
 import com.osfans.trime.daemon.RimeDaemon
 import com.osfans.trime.data.theme.ColorManager
 import com.osfans.trime.data.theme.Theme
@@ -306,10 +307,16 @@ class Key(
     val symbolLabel: String
         get() = labelSymbol.ifEmpty { longClick?.getLabel(parent) ?: "" }
 
+    /** The voice key, and the space bar whose long press records, light up while recording. */
+    private val isVoiceKey: Boolean
+        get() = click?.code == KeyEvent.KEYCODE_VOICE_ASSIST ||
+            getAction(KeyBehavior.LONG_CLICK)?.code == KeyEvent.KEYCODE_VOICE_ASSIST
+
     private val appearanceType: Int
         get() {
             return when {
-                click?.isModifierKey == true && parent.modifier.hasFlag(click!!.modifierKeyOnMask) || isOn -> 2
+                click?.isModifierKey == true && parent.modifier.hasFlag(click!!.modifierKeyOnMask) || isOn ||
+                    (VoiceDictation.isRecording && isVoiceKey) -> 2
                 click?.isSticky == true || click?.isFunctional == true -> 1
                 else -> 0
             }

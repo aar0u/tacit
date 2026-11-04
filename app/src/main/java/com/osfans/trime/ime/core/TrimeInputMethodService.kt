@@ -196,12 +196,8 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
             it.registerOnChangeListener(recreateInputViewListener)
         }
         prefs.candidates.registerOnChangeListener(recreateCandidatesViewListener)
-        // The voice key shows its on/off state through this Rime option.
-        VoiceDictation.onStateChanged = { on ->
-            rime.launchOnReady { api ->
-                lifecycleScope.launch { api.setRuntimeOption("_voice_input", on) }
-            }
-        }
+        // The voice key, the space bar and the toolbar button show whether it is recording.
+        VoiceDictation.onStateChanged = { on -> inputView?.refreshVoiceState(on) }
         // ensure theme and color managers are initialized after rime is ready
         lifecycleScope.launch {
             rime.runOnReady {

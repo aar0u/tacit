@@ -34,6 +34,12 @@ style:
     send: 发送
     default: 换行
 
+# A key that is switched on (the voice key and the space bar while recording) uses the
+# enter key colors.
+fallback_colors:
+  on_key_back_color: enter_key_back_color
+  on_key_text_color: enter_key_text_color
+
 preset_color_schemes:
   default:
     name: 薰衣草紫
@@ -58,6 +64,23 @@ preset_color_schemes:
     func_key_hilited_color: 0xc9b9f0
     enter_key_back_color: 0x8f73e2
     enter_key_text_color: 0xffffff
+    # This scheme is merged over the upstream "default" one, which sets these to its
+    # own teal and grey, so the on, off and pressed states are spelled out.
+    on_key_back_color: 0x8f73e2
+    on_key_text_color: 0xffffff
+    off_key_back_color: 0xe8def8
+    off_key_text_color: 0x25212c
+    hilited_off_key_back_color: 0xc9b9f0
+    hilited_off_key_text_color: 0x25212c
+    hilited_on_key_back_color: 0x7a5fd0
+    hilited_on_key_text_color: 0xffffff
+    hilited_key_text_color: 0x25212c
+    hilited_key_symbol_color: 0x25212c
+    hilited_comment_text_color: 0x59417f
+    hilited_back_color: 0xe8def8
+    label_color: 0x87838b
+    preview_back_color: 0xfffbff
+    preview_text_color: 0x25212c
   lavender_dark:
     name: 薰衣草紫（深色）
     author: Tacit
@@ -326,26 +349,28 @@ tool_bar:
       vertical_inset: 4
       horizontal_inset: 4
     foreground:
-      style: "ic@dots_horizontal"
+      style: "ic@view_grid"
       normal: candidate_text_color
       padding: 10
     action: menu_keyboard
     long_press_action: Settings
   buttons:
-    - foreground: {style: "ic@keyboard_close", normal: candidate_text_color}
+    - foreground: {style: "ic@chevron_down", normal: candidate_text_color}
       action: Hide
-    - foreground: {style: "ic@emoticon", normal: candidate_text_color}
+    - foreground: {style: "ic@emoticon_outline", normal: candidate_text_color}
       action: liquid_keyboard_emoji
-    - foreground: {style: "ic@clipboard", normal: candidate_text_color}
+    - foreground: {style: "ic@clipboard_text_outline", normal: candidate_text_color}
       action: clipboard_window
     - foreground: {style: "ic@cursor_text", normal: candidate_text_color}
       action: Keyboard_editor
-    - foreground: {option_styles: ["ic@microphone_off", "ic@microphone"], normal: candidate_text_color}
+    - foreground: {option_styles: ["ic@microphone_outline", "ic@microphone"], normal: candidate_text_color}
       action: VOICE_ASSIST
     - foreground: {option_styles: ["中", "En"], font_size: 18, padding: 10, normal: candidate_text_color}
       action: Mode_switch
 
 preset_keys:
+  # The toolbar's first button names this key; without it the button typed its own name.
+  menu_keyboard: {label: 菜单, send: FUNCTION, command: menu_keyboard}
   # Keys of the editor keyboard (cursor movement, selection, clipboard operations).
   Keyboard_editor: {label: 编辑, functional: false, send: Eisu_toggle, select: editor}
   space1: {label: 空格, repeatable: false, functional: false, send: space}
@@ -362,16 +387,17 @@ preset_keys:
   undo: {label: 撤销, send: Control+z}
   redo: {label: 重做, send: Control+Shift+z}
   # The voice key shows its state through the runtime option _voice_input, which
-  # VoiceDictation sets whenever recording starts or stops.
-  VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, states: [ 语音关, 语音开 ]}
+  # VoiceDictation sets whenever recording starts or stops. The key and the space bar
+  # also light up while recording (Key.appearanceType).
+  VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, states: [ "ic@microphone_outline", "ic@microphone" ]}
   # Long press on the space bar: record while held.
-  VOICE_HOLD: {send: VOICE_ASSIST, option: hold}
-  space: {label: ' ', repeatable: false, functional: false, send: space}
-  Shift_L: {label: ⇧, send: Shift_L, shift_lock: ascii_long}
-  Return: {label: ↵, send: Return}
-  Return1: {label: ↵, send: Return}
+  VOICE_HOLD: {label: 按住说话, send: VOICE_ASSIST, option: hold}
+  space: {toggle: _voice_input, send: space, repeatable: false, functional: false, states: [ ' ', "ic@microphone" ]}
+  Shift_L: {label: "ic@arrow_up_bold_outline", send: Shift_L, shift_lock: ascii_long}
+  Return: {label: "ic@keyboard_return", send: Return}
+  Return1: {label: "ic@keyboard_return", send: Return}
   Hide: {label: 隐藏, send: BACK}
-  BackSpace: {label: ⌫, repeatable: true, send: BackSpace}
+  BackSpace: {label: "ic@backspace_outline", repeatable: true, send: BackSpace}
   Clear: {label: 清空, text: "{Control+a}{BackSpace}"}
   Delete: {label: 删除, send: Delete}
   select_all: {label: 全选, send: Control+a}
@@ -438,7 +464,18 @@ preset_keyboards:
     - {click: '.', long_click: '>', width: 9}
     - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Mode_switch, long_click: Menu, width: 11, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+    - {click: Return, composing: Return1, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+  # Until rime_ice has been deployed (about three minutes after a fresh install) the
+  # active schema is another one, and Trime then falls back to these layouts. Tacit has
+  # only the one letter layout, so all of them are the same.
+  default:
+    __include: /preset_keyboards/rime_ice
+  qwerty:
+    __include: /preset_keyboards/rime_ice
+  qwerty_:
+    __include: /preset_keyboards/rime_ice
+  qwerty0:
+    __include: /preset_keyboards/rime_ice
   editor:
     name: 编辑
     ascii_mode: 1

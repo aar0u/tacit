@@ -41,6 +41,8 @@ object VoiceDictation {
     private var startWhenReady = false
     private var holding = false
 
+    val isRecording: Boolean get() = recording
+
     /** Called on the main thread whenever recording starts or stops; drives the key's on/off label. */
     var onStateChanged: ((Boolean) -> Unit)? = null
     private var captureThread: Thread? = null

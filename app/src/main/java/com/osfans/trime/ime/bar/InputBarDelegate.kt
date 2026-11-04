@@ -380,4 +380,9 @@ class InputBarDelegate(override val di: DI) :
     override fun onRimeOptionUpdated(value: RimeMessage.OptionMessage.Data) {
         alwaysUi.updateButtonsStyle(value.option, value.value)
     }
+
+    /** For toggles that do not live in Rime, such as the voice key. */
+    fun updateToggle(option: String, enabled: Boolean) {
+        alwaysUi.updateButtonsStyle(option, enabled)
+    }
 }

@@ -165,6 +165,12 @@ class InputView(
 
     val keyboardView: View
 
+    /** Redraws the voice key, the space bar and the toolbar button when recording starts or stops. */
+    fun refreshVoiceState(recording: Boolean) {
+        keyboardWindow.refreshColors()
+        inputBar.updateToggle("_voice_input", recording)
+    }
+
     /** Restyles colors after a scheme switch without rebuilding the view tree. */
     fun refreshColors() {
         keyboardBackground.imageDrawable = scope.drawable("keyboard_background")

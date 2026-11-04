@@ -5,6 +5,7 @@
 package com.osfans.trime.ime.keyboard
 
 import android.view.KeyEvent
+import com.aar0u.tacit.voice.VoiceDictation
 import com.osfans.trime.daemon.RimeDaemon
 import com.osfans.trime.data.prefs.AppPrefs
 import com.osfans.trime.data.prefs.LazyPreferenceDelegate
@@ -134,7 +135,9 @@ class KeyAction(
     fun getLabel(keyboard: Keyboard): String {
         ensureLabels()
         if (states.isNotEmpty() && toggle.isNotEmpty()) {
-            return states[if (rime.run { getRuntimeOption(toggle) }) 1 else 0]
+            // The voice toggle is not a Rime option; its state is whether recording is on.
+            val on = if (toggle == "_voice_input") VoiceDictation.isRecording else rime.run { getRuntimeOption(toggle) }
+            return states[if (on) 1 else 0]
         }
         if (keyboard.isOnlyShiftOn) {
             val asciiMode = rime.run { statusCached }.isAsciiMode
