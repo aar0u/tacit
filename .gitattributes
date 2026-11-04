@@ -5,3 +5,8 @@
 # Handle line endings automatically for files detected as text
 # and leave all files detected as binary untouched.
 *	text=auto
+
+# Tacit-owned files: on a sync with upstream, keep our version.
+# Needs `git config merge.ours.driver true` (script/sync-upstream.sh sets it).
+README*.md	merge=ours
+.github/workflows/*	merge=ours
