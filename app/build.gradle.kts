@@ -22,7 +22,7 @@ android {
     buildToolsVersion = "37.0.0"
 
     defaultConfig {
-        applicationId = "com.osfans.trime"
+        applicationId = "com.aar0u.tacit"
         minSdk = 21
         targetSdk = 37
         versionCode = 20261101
