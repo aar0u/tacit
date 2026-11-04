@@ -9,4 +9,5 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <string name="dark_mode_system">Follow system</string>
     <string name="dark_mode_light">Light</string>
     <string name="dark_mode_dark">Dark</string>
+    <string name="deploying_dictionary">Preparing the dictionary. This takes a few minutes the first time.</string>
 </resources>

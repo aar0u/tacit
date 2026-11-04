@@ -6,6 +6,8 @@
 package com.osfans.trime.ime.bar.ui
 
 import android.content.Context
+import android.view.Gravity
+import android.widget.TextView
 import android.widget.ViewAnimator
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +16,7 @@ import com.osfans.trime.R
 import com.osfans.trime.data.theme.Theme
 import com.osfans.trime.data.theme.ThemeScope
 import com.osfans.trime.data.theme.model.ToolBar
+import splitties.dimensions.dp
 import splitties.views.dsl.constraintlayout.after
 import splitties.views.dsl.constraintlayout.before
 import splitties.views.dsl.constraintlayout.centerVertically
@@ -39,6 +42,7 @@ class AlwaysUi(
         Toolbar,
         Clipboard,
         InlineSuggestion,
+        Notice,
     }
 
     var currentState = State.Toolbar
@@ -70,6 +74,16 @@ class AlwaysUi(
 
     val inlineSuggestionsUi = InlineSuggestionsUi(ctx)
 
+    /** A line of text in the toolbar's place, such as "preparing the dictionary". */
+    val noticeUi = TextView(ctx).apply {
+        setText(R.string.deploying_dictionary)
+        textSize = 14f
+        gravity = Gravity.CENTER_VERTICAL
+        maxLines = 2
+        setPadding(ctx.dp(8), 0, ctx.dp(8), 0)
+        setTextColor(scope.colors.candidateTextColor)
+    }
+
     val hideKeyboardButton = ToolButton(ctx, R.drawable.ic_baseline_arrow_drop_down_24, scope)
     private val rightMostButton =
         ViewAnimator(ctx).apply {
@@ -87,6 +101,7 @@ class AlwaysUi(
             add(buttonsUi.root, lParams(matchParent, matchParent))
             add(clipboardUi.root, lParams(matchParent, matchParent))
             add(inlineSuggestionsUi.root, lParams(matchParent, matchParent))
+            add(noticeUi, lParams(matchParent, matchParent))
         }
 
     override val root: ConstraintLayout = constraintLayout {
@@ -146,6 +161,7 @@ class AlwaysUi(
         hideKeyboardButton.refreshColors()
         buttonsUi.refreshColors()
         clipboardUi.refreshColors()
+        noticeUi.setTextColor(scope.colors.candidateTextColor)
     }
 
     private fun updateRightMostButton(state: State) {

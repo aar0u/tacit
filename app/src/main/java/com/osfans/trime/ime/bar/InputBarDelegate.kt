@@ -19,6 +19,7 @@ import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.aar0u.tacit.DeployStatus
 import com.osfans.trime.R
 import com.osfans.trime.core.Candidates
 import com.osfans.trime.core.RimeMessage
@@ -85,6 +86,10 @@ class InputBarDelegate(override val di: DI) :
 
     private var isClipboardFresh: Boolean = false
     private var isInlineSuggestionPresent: Boolean = false
+    private var isDeploying: Boolean = false
+
+    // Building the toolbar needs the keyboard, which does not exist yet when the flow first emits.
+    private var isAlwaysUiBuilt: Boolean = false
 
     @Keep
     private val onClipboardUpdateListener = ClipboardHelper.OnClipboardUpdateListener {
@@ -116,6 +121,7 @@ class InputBarDelegate(override val di: DI) :
     private fun evalAlwaysUiState() {
         val newState =
             when {
+                isDeploying -> AlwaysUi.State.Notice
                 isClipboardFresh -> AlwaysUi.State.Clipboard
                 isInlineSuggestionPresent -> AlwaysUi.State.InlineSuggestion
                 else -> AlwaysUi.State.Toolbar
@@ -264,6 +270,7 @@ class InputBarDelegate(override val di: DI) :
             add(tabUi.root, lParams(matchParent, matchParent))
 
             evalAlwaysUiState()
+            isAlwaysUiBuilt = true
             ClipboardHelper.addOnUpdateListener(onClipboardUpdateListener)
             syncToolbarOptionStates()
         }
@@ -373,6 +380,16 @@ class InputBarDelegate(override val di: DI) :
                 states.forEach { (option, enabled) ->
                     alwaysUi.updateButtonsStyle(option, enabled)
                 }
+            }
+        }
+    }
+
+    init {
+        // While Rime compiles its dictionaries nothing can be typed in Chinese, so say so.
+        service.lifecycleScope.launch {
+            DeployStatus.deploying.collect {
+                isDeploying = it
+                if (isAlwaysUiBuilt) evalAlwaysUiState()
             }
         }
     }

@@ -5,6 +5,7 @@
 
 package com.osfans.trime.core
 
+import com.aar0u.tacit.DeployStatus
 import com.osfans.trime.BuildConfig
 import com.osfans.trime.core.data.DataManager
 import com.osfans.trime.core.data.UserDataManager
@@ -372,6 +373,7 @@ class Rime :
             }
 
             is RimeMessage.DeployMessage -> {
+                DeployStatus.update(it.data)
                 if (it.data == RimeMessage.DeployMessage.State.Start) {
                     OpenCCDictManager.buildOpenCCDict()
                 }
