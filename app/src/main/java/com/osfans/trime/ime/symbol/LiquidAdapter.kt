@@ -47,6 +47,10 @@ class LiquidAdapter(
     ) {
         item ?: return
         holder.ui.refreshColors()
+        // Single symbols and emoji keep the key size; words such as the tab names use the long-label size.
+        val style = scope.theme.style
+        holder.ui.mainText.textSize =
+            if (item.text.codePointCount(0, item.text.length) > 1) style.keyLongTextSize else style.keyTextSize
         holder.ui.mainText.text = item.text
         holder.ui.root.setOnClickListener {
             onItemClick.invoke(item, position)

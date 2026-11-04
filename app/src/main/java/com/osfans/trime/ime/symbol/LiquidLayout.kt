@@ -61,7 +61,11 @@ class LiquidLayout(
                         val presetKey = theme.presetKeys[presetKeyName]
                         val ui = LiquidItemUi(context, scope)
                         fixedKeyItems += ui
-                        ui.mainText.text = presetKey?.label ?: ""
+                        val label = presetKey?.label ?: ""
+                        // Words use the long-label size; a single glyph such as ⌫ keeps the key size.
+                        ui.mainText.textSize =
+                            if (label.codePointCount(0, label.length) > 1) theme.style.keyLongTextSize else theme.style.keyTextSize
+                        ui.mainText.text = label
                         ui.root.apply {
                             isRepeatable = presetKey?.repeatable ?: false
                             onClick = {

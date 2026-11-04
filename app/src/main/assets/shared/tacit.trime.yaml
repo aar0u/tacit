@@ -20,6 +20,7 @@ style:
   horizontal_gap: 5
   vertical_gap: 9
   key_text_size: 24
+  key_long_text_size: 16
   symbol_text_size: 11
   candidate_text_size: 22
   candidate_view_height: 40
@@ -335,6 +336,12 @@ preset_color_schemes:
     enter_key_back_color: 0x8e6f64
     enter_key_text_color: 0xffffff
 
+# The "more" panel (symbols, emoji, lists). Its bar draws labels as plain text, so it
+# uses glyph keys, not the icon-font ones of the main keyboard.
+liquid_keyboard:
+  fixed_key_bar:
+    keys: [liquid_keyboard_exit, space1, BackSpace_text, Return_text, clipboard_window, liquid_keyboard_switch]
+
 # The bar above the keys: menu, hide, emoji, clipboard history, cursor and selection
 # keys, voice and the Chinese/English switch. Icons come from the bundled icon font.
 tool_bar:
@@ -369,6 +376,11 @@ tool_bar:
       action: Mode_switch
 
 preset_keys:
+  BackSpace_text: {label: ⌫, repeatable: true, send: BackSpace}
+  Return_text: {label: ↵, send: Return}
+  liquid_keyboard_exit: {label: 返回, send: FUNCTION, command: liquid_keyboard, option: "-1"}
+  liquid_keyboard_switch: {label: 更多, send: FUNCTION, command: liquid_keyboard, option: "更多"}
+  clipboard_window: {label: 剪贴, send: FUNCTION, command: clipboard_window, option: '0'}
   # The toolbar's first button names this key; without it the button typed its own name.
   menu_keyboard: {label: 菜单, send: FUNCTION, command: menu_keyboard}
   # Keys of the editor keyboard (cursor movement, selection, clipboard operations).
