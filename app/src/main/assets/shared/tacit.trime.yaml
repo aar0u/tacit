@@ -370,14 +370,11 @@ tool_bar:
       action: clipboard_window
     - foreground: {style: "ic@cursor_text", normal: candidate_text_color}
       action: Keyboard_editor
-    - foreground: {option_styles: ["ic@microphone_outline", "ic@microphone"], normal: candidate_text_color}
-      action: VOICE_ASSIST
-    - foreground: {option_styles: ["中", "En"], font_size: 18, padding: 10, normal: candidate_text_color}
-      action: Mode_switch
+  # No voice or 中/En button here: the bottom row of the keyboard already has both.
 
 preset_keys:
-  BackSpace_text: {label: ⌫, repeatable: true, send: BackSpace}
-  Return_text: {label: ↵, send: Return}
+  BackSpace_text: {label: 退格, repeatable: true, send: BackSpace}
+  Return_text: {label: 回车, send: Return}
   liquid_keyboard_exit: {label: 返回, send: FUNCTION, command: liquid_keyboard, option: "-1"}
   liquid_keyboard_switch: {label: 更多, send: FUNCTION, command: liquid_keyboard, option: "更多"}
   clipboard_window: {label: 剪贴, send: FUNCTION, command: clipboard_window, option: '0'}
@@ -560,11 +557,11 @@ preset_keyboards:
     - {click: '“', ascii: '"', long_click: '‘'}
     - {click: '”', ascii: "'", long_click: '’'}
     - {click: '，', ascii: ',', long_click: one_hand_switch_1}
-    - {click: '？', ascii: '?', long_click: one_hand_switch_3}
+    - {click: '？', ascii: '?', long_click: one_hand_switch_2}
     - {click: BackSpace, long_click: Clear, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Keyboard_default, long_click: Menu, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: Keyboard_number, long_click: Color_switch, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
     - {click: space, width: 30}
     - {click: '。', ascii: '.', width: 12}
     - {click: liquid_keyboard_switch, long_click: Delete, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Return, long_click: select_all, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+    - {click: Return, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

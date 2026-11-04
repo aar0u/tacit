@@ -138,7 +138,13 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                 if (shouldHandle) {
                     when (action.code) {
                         KeyEvent.KEYCODE_SWITCH_CHARSET -> handleSwitchCharset(action)
-                        KeyEvent.KEYCODE_EISU -> keyboardWindow.switchKeyboard(action.select)
+                        KeyEvent.KEYCODE_EISU ->
+                            // The toolbar's editor button opens the editor keyboard and closes it again.
+                            if (action.select == "editor" && keyboardWindow.keyboardId == "editor") {
+                                keyboardWindow.switchKeyboard(".default")
+                            } else {
+                                keyboardWindow.switchKeyboard(action.select)
+                            }
                         KeyEvent.KEYCODE_LANGUAGE_SWITCH -> handleLanguageSwitch(action)
                         KeyEvent.KEYCODE_FUNCTION -> handleFunctionCommand(action)
                         KeyEvent.KEYCODE_SETTINGS -> handleSettings(action)
@@ -222,6 +228,11 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
             }
 
             private fun handleClipboardWindow(arg: String) {
+                // The toolbar's clipboard button opens the panel and closes it again.
+                if (windowManager.currentWindowOrNull is ClipboardWindow) {
+                    windowManager.attachWindow(KeyboardWindow)
+                    return
+                }
                 val tabIndex = arg.toIntOrNull()?.coerceIn(0, 1) ?: 0
                 windowManager.attachWindow(ClipboardWindow(di, tabIndex))
             }

@@ -80,6 +80,7 @@ class KeyboardWindow(di: DI) :
 
     private val presetKeyboardIds = theme.presetKeyboards.keys.toList()
     private var currentKeyboardId = ""
+    val keyboardId: String get() = currentKeyboardId
     private var lastKeyboardId = ""
     private var lastLockKeyboardId = ""
     private var tempAsciiMode: Boolean? = null
