@@ -16,37 +16,44 @@ import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.osfans.trime.R
 import com.osfans.trime.ime.core.TrimeInputMethodService
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
 /**
- * Offline dictation inside the keyboard process. The engine takes about 11 s to
- * load, so it is loaded once and kept; the keyboard's microphone key then starts
- * recording at once. Each sentence is typed after a short pause.
+ * Offline dictation inside the keyboard process. Loading the engine takes a few seconds,
+ * so it is loaded once, as soon as the keyboard shows, and kept until the system asks
+ * for memory back. After that the voice key and the space bar start recording at once
+ * and every sentence is typed after a short pause.
  *
- * All entry points run on the main thread. Audio capture and decoding run on
- * their own threads and hand text back through [main].
+ * All entry points run on the main thread. Audio capture and decoding run on their own
+ * threads and hand text back through [main].
  */
 object VoiceDictation {
     private const val TAG = "TacitVoice"
 
+    /** Toggle name that voice keys use in the theme; its state is [isRecording], not a Rime option. */
+    const val TOGGLE_OPTION = "_voice_input"
+
     private val main = Handler(Looper.getMainLooper())
     private val worker = Executors.newSingleThreadExecutor { Thread(it, "tacit-voice-worker") }
 
+    // Written on the main thread, read by the capture and decoding threads.
     @Volatile private var engine: VoiceEngine? = null
     @Volatile private var recording = false
+
     private var loading = false
     private var startWhenReady = false
     private var holding = false
+    private var captureThread: Thread? = null
+    private var target = WeakReference<TrimeInputMethodService>(null)
 
     val isRecording: Boolean get() = recording
 
-    /** Called on the main thread whenever recording starts or stops; drives the key's on/off label. */
+    /** Called on the main thread whenever recording starts or stops, so the keys can redraw. */
     var onStateChanged: ((Boolean) -> Unit)? = null
-    private var captureThread: Thread? = null
-    private var target = WeakReference<TrimeInputMethodService>(null)
 
     private fun hasPermission(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
@@ -64,33 +71,35 @@ object VoiceDictation {
             }
             result.onSuccess { Log.i(TAG, "engine loaded in ${SystemClock.elapsedRealtime() - startedAt} ms") }
                 .onFailure { Log.e(TAG, "engine failed to load", it) }
-            main.post {
-                loading = false
-                result.onSuccess { loaded ->
-                    engine = loaded
-                    val service = target.get()
-                    if (startWhenReady && service != null) startRecording(service)
-                }.onFailure { toast(app, app.getString(R.string.voice_failed, it.message)) }
-                startWhenReady = false
-            }
+            main.post { onEngineLoaded(app, result) }
         }
     }
 
-    /** The microphone key: start or stop dictation. */
+    private fun onEngineLoaded(context: Context, result: Result<VoiceEngine>) {
+        loading = false
+        result.onSuccess { loaded ->
+            engine = loaded
+            val service = target.get()
+            if (startWhenReady && service != null) startRecording(service)
+        }.onFailure { toast(context, R.string.voice_failed, it.message.orEmpty()) }
+        startWhenReady = false
+    }
+
+    /** The voice key: start or stop dictation. */
     fun toggle(service: TrimeInputMethodService) {
         target = WeakReference(service)
         when {
             recording -> {
                 stop()
-                toast(service, service.getString(R.string.voice_stopped))
+                toast(service, R.string.voice_stopped)
             }
             !hasPermission(service) -> service.startActivity(
                 Intent(service, VoicePermissionActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
             )
-            !ModelFiles.isBundled(service) -> toast(service, service.getString(R.string.voice_no_models))
+            !ModelFiles.isBundled(service) -> toast(service, R.string.voice_no_models)
             engine == null -> {
                 startWhenReady = true
-                toast(service, service.getString(R.string.voice_loading))
+                toast(service, R.string.voice_loading)
                 preload(service)
             }
             else -> startRecording(service)
@@ -105,8 +114,7 @@ object VoiceDictation {
 
     /** The space bar was released after [startHold]. A no-op for any other long press. */
     fun releaseHold() {
-        if (!holding) return
-        stop()
+        if (holding) stop()
     }
 
     /** Ends recording; the sentence still being spoken is finished and typed. */
@@ -114,12 +122,6 @@ object VoiceDictation {
         startWhenReady = false
         holding = false
         setRecording(false)
-    }
-
-    private fun setRecording(on: Boolean) {
-        if (recording == on) return
-        recording = on
-        onStateChanged?.invoke(on)
     }
 
     /** Frees the engine (about half a gigabyte) when the system is short of memory. */
@@ -132,6 +134,12 @@ object VoiceDictation {
             thread?.join(2000)
             old?.release()
         }
+    }
+
+    private fun setRecording(on: Boolean) {
+        if (recording == on) return
+        recording = on
+        onStateChanged?.invoke(on)
     }
 
     private fun startRecording(service: TrimeInputMethodService) {
@@ -150,11 +158,11 @@ object VoiceDictation {
         )
         if (recorder.state != AudioRecord.STATE_INITIALIZED) {
             recorder.release()
-            toast(service, service.getString(R.string.voice_mic_busy))
+            toast(service, R.string.voice_mic_busy)
             return
         }
         setRecording(true)
-        toast(service, service.getString(R.string.voice_listening))
+        toast(service, R.string.voice_listening)
         captureThread = Thread({ capture(recorder, active) }, "tacit-voice-capture").also { it.start() }
     }
 
@@ -186,6 +194,6 @@ object VoiceDictation {
         }
     }
 
-    private fun toast(context: Context, message: String) =
-        Toast.makeText(context.applicationContext, message, Toast.LENGTH_SHORT).show()
+    private fun toast(context: Context, @StringRes message: Int, vararg args: Any) =
+        Toast.makeText(context.applicationContext, context.getString(message, *args), Toast.LENGTH_SHORT).show()
 }

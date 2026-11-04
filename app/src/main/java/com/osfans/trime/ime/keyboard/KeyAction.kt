@@ -136,7 +136,7 @@ class KeyAction(
         ensureLabels()
         if (states.isNotEmpty() && toggle.isNotEmpty()) {
             // The voice toggle is not a Rime option; its state is whether recording is on.
-            val on = if (toggle == "_voice_input") VoiceDictation.isRecording else rime.run { getRuntimeOption(toggle) }
+            val on = if (toggle == VoiceDictation.TOGGLE_OPTION) VoiceDictation.isRecording else rime.run { getRuntimeOption(toggle) }
             return states[if (on) 1 else 0]
         }
         if (keyboard.isOnlyShiftOn) {

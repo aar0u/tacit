@@ -60,18 +60,15 @@ preset_color_schemes:
     key_text_color: 0x25212c
     key_symbol_color: 0x87838b
     hilited_key_back_color: 0xe6ddf9
-    func_key_back_color: 0xe8def8
-    func_key_text_color: 0x25212c
-    func_key_hilited_color: 0xc9b9f0
-    enter_key_back_color: 0x8f73e2
-    enter_key_text_color: 0xffffff
-    # This scheme is merged over the upstream "default" one, which sets these to its
-    # own teal and grey, so the on, off and pressed states are spelled out.
-    on_key_back_color: 0x8f73e2
-    on_key_text_color: 0xffffff
     off_key_back_color: 0xe8def8
     off_key_text_color: 0x25212c
     hilited_off_key_back_color: 0xc9b9f0
+    enter_key_back_color: 0x8f73e2
+    enter_key_text_color: 0xffffff
+    # This scheme is merged over the upstream "default" one, which sets the rest of these
+    # to its own teal and grey, so the on and pressed states are spelled out.
+    on_key_back_color: 0x8f73e2
+    on_key_text_color: 0xffffff
     hilited_off_key_text_color: 0x25212c
     hilited_on_key_back_color: 0x7a5fd0
     hilited_on_key_text_color: 0xffffff
@@ -100,9 +97,9 @@ preset_color_schemes:
     key_text_color: 0xf0eaf5
     key_symbol_color: 0x9d98a3
     hilited_key_back_color: 0x595169
-    func_key_back_color: 0x605d77
-    func_key_text_color: 0xf0eaf5
-    func_key_hilited_color: 0x877ea7
+    off_key_back_color: 0x605d77
+    off_key_text_color: 0xf0eaf5
+    hilited_off_key_back_color: 0x877ea7
     enter_key_back_color: 0xd0bcff
     enter_key_text_color: 0x202020
   blue:
@@ -123,9 +120,9 @@ preset_color_schemes:
     key_text_color: 0x20242c
     key_symbol_color: 0x84878b
     hilited_key_back_color: 0xd5dde9
-    func_key_back_color: 0xdce6fa
-    func_key_text_color: 0x20242c
-    func_key_hilited_color: 0xa6b8d9
+    off_key_back_color: 0xdce6fa
+    off_key_text_color: 0x20242c
+    hilited_off_key_back_color: 0xa6b8d9
     enter_key_back_color: 0x42639c
     enter_key_text_color: 0xffffff
   blue_dark:
@@ -146,9 +143,9 @@ preset_color_schemes:
     key_text_color: 0xe9edf5
     key_symbol_color: 0x9599a1
     hilited_key_back_color: 0x4b5364
-    func_key_back_color: 0x495a7d
-    func_key_text_color: 0xe9edf5
-    func_key_hilited_color: 0x6e81a9
+    off_key_back_color: 0x495a7d
+    off_key_text_color: 0xe9edf5
+    hilited_off_key_back_color: 0x6e81a9
     enter_key_back_color: 0xb4cafa
     enter_key_text_color: 0x202020
   black:
@@ -169,9 +166,9 @@ preset_color_schemes:
     key_text_color: 0x202020
     key_symbol_color: 0x848484
     hilited_key_back_color: 0xd6d6d6
-    func_key_back_color: 0xd4d4d8
-    func_key_text_color: 0x202020
-    func_key_hilited_color: 0xa2a2a5
+    off_key_back_color: 0xd4d4d8
+    off_key_text_color: 0x202020
+    hilited_off_key_back_color: 0xa2a2a5
     enter_key_back_color: 0xd4d4d8
     enter_key_text_color: 0x202020
   black_dark:
@@ -192,9 +189,9 @@ preset_color_schemes:
     key_text_color: 0xffffff
     key_symbol_color: 0x99999a
     hilited_key_back_color: 0x474749
-    func_key_back_color: 0x29292b
-    func_key_text_color: 0xffffff
-    func_key_hilited_color: 0x69696a
+    off_key_back_color: 0x29292b
+    off_key_text_color: 0xffffff
+    hilited_off_key_back_color: 0x69696a
     enter_key_back_color: 0x29292b
     enter_key_text_color: 0xffffff
   mint:
@@ -215,9 +212,9 @@ preset_color_schemes:
     key_text_color: 0x112e12
     key_symbol_color: 0x788c79
     hilited_key_back_color: 0xc0dbc4
-    func_key_back_color: 0xb4dcb3
-    func_key_text_color: 0x112e12
-    func_key_hilited_color: 0x75b07a
+    off_key_back_color: 0xb4dcb3
+    off_key_text_color: 0x112e12
+    hilited_off_key_back_color: 0x75b07a
     enter_key_back_color: 0x7cca7c
     enter_key_text_color: 0x202020
   mint_dark:
@@ -238,9 +235,9 @@ preset_color_schemes:
     key_text_color: 0xe9f4e9
     key_symbol_color: 0x92a292
     hilited_key_back_color: 0x416341
-    func_key_back_color: 0x132c13
-    func_key_text_color: 0xe9f4e9
-    func_key_hilited_color: 0x426e42
+    off_key_back_color: 0x132c13
+    off_key_text_color: 0xe9f4e9
+    hilited_off_key_back_color: 0x426e42
     enter_key_back_color: 0x37853a
     enter_key_text_color: 0xffffff
   sakura:
@@ -261,9 +258,9 @@ preset_color_schemes:
     key_text_color: 0x3e1820
     key_symbol_color: 0x957e83
     hilited_key_back_color: 0xe5c8d1
-    func_key_back_color: 0xf9bdc5
-    func_key_text_color: 0x3e1820
-    func_key_hilited_color: 0xd28395
+    off_key_back_color: 0xf9bdc5
+    off_key_text_color: 0x3e1820
+    hilited_off_key_back_color: 0xd28395
     enter_key_back_color: 0xfc9aaa
     enter_key_text_color: 0x202020
   sakura_dark:
@@ -284,9 +281,9 @@ preset_color_schemes:
     key_text_color: 0xfcebed
     key_symbol_color: 0xac9698
     hilited_key_back_color: 0x734d52
-    func_key_back_color: 0x3b191f
-    func_key_text_color: 0xfcebed
-    func_key_hilited_color: 0x805259
+    off_key_back_color: 0x3b191f
+    off_key_text_color: 0xfcebed
+    hilited_off_key_back_color: 0x805259
     enter_key_back_color: 0xe3125e
     enter_key_text_color: 0xffffff
   cream:
@@ -307,9 +304,9 @@ preset_color_schemes:
     key_text_color: 0x34211a
     key_symbol_color: 0x8f837e
     hilited_key_back_color: 0xdcd3cf
-    func_key_back_color: 0xe6c8bd
-    func_key_text_color: 0x34211a
-    func_key_hilited_color: 0xb89a90
+    off_key_back_color: 0xe6c8bd
+    off_key_text_color: 0x34211a
+    hilited_off_key_back_color: 0xb89a90
     enter_key_back_color: 0xd1afa3
     enter_key_text_color: 0x202020
   cream_dark:
@@ -330,9 +327,9 @@ preset_color_schemes:
     key_text_color: 0xf6eeeb
     key_symbol_color: 0xa59a96
     hilited_key_back_color: 0x67544c
-    func_key_back_color: 0x32201a
-    func_key_text_color: 0xf6eeeb
-    func_key_hilited_color: 0x735b53
+    off_key_back_color: 0x32201a
+    off_key_text_color: 0xf6eeeb
+    hilited_off_key_back_color: 0x735b53
     enter_key_back_color: 0x8e6f64
     enter_key_text_color: 0xffffff
 
@@ -375,14 +372,13 @@ tool_bar:
 preset_keys:
   BackSpace_text: {label: 退格, repeatable: true, send: BackSpace}
   Return_text: {label: 回车, send: Return}
-  liquid_keyboard_exit: {label: 返回, send: FUNCTION, command: liquid_keyboard, option: "-1"}
-  liquid_keyboard_switch: {label: 更多, send: FUNCTION, command: liquid_keyboard, option: "更多"}
-  clipboard_window: {label: 剪贴, send: FUNCTION, command: clipboard_window, option: '0'}
+  # Only the difference from the upstream key.
+  liquid_keyboard_switch: {functional: true}
   # The toolbar's first button names this key; without it the button typed its own name.
   menu_keyboard: {label: 菜单, send: FUNCTION, command: menu_keyboard}
   # Keys of the editor keyboard (cursor movement, selection, clipboard operations).
   Keyboard_editor: {label: 编辑, functional: false, send: Eisu_toggle, select: editor}
-  space1: {label: 空格, repeatable: false, functional: false, send: space}
+  space1: {label: 空格, repeatable: false, functional: true, send: space}
   Left: {label: '←', send: Left, repeatable: true, functional: false}
   Right: {label: '→', send: Right, repeatable: true, functional: false}
   Up: {label: '↑', send: Up, repeatable: true, functional: false}
@@ -391,22 +387,22 @@ preset_keys:
   Right1: {label: '⇨', send: Control+Right, repeatable: true, functional: false}
   Home: {label: 行首, send: Home}
   End: {label: 行尾, send: End}
-  Shift_L2: {label: 选择, preview: '⇪', functional: false, send: Shift_L}
+  Shift_L2: {label: 选择, preview: '⇪', functional: true, send: Shift_L}
   Tab1: {label: Tab, functional: false, send: Tab}
   undo: {label: 撤销, send: Control+z}
   redo: {label: 重做, send: Control+Shift+z}
-  # The voice key shows its state through the runtime option _voice_input, which
-  # VoiceDictation sets whenever recording starts or stops. The key and the space bar
-  # also light up while recording (Key.appearanceType).
-  VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, states: [ "ic@microphone_outline", "ic@microphone" ]}
+  # _voice_input is not a Rime option: KeyAction reads it from VoiceDictation, which also
+  # lights these keys up while recording (Key.appearanceType).
+  VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, functional: true, states: [ "ic@microphone_outline", "ic@microphone" ]}
   # Long press on the space bar: record while held.
   VOICE_HOLD: {label: 按住说话, send: VOICE_ASSIST, option: hold}
   space: {toggle: _voice_input, send: space, repeatable: false, functional: false, states: [ ' ', "ic@microphone" ]}
-  Shift_L: {label: "ic@arrow_up_bold_outline", send: Shift_L, shift_lock: ascii_long}
+  # Functional keys take the off_key_* colors of the color scheme.
+  Shift_L: {label: "ic@arrow_up_bold_outline", send: Shift_L, shift_lock: ascii_long, functional: true}
   Return: {label: "ic@keyboard_return", send: Return}
   Return1: {label: "ic@keyboard_return", send: Return}
   Hide: {label: 隐藏, send: BACK}
-  BackSpace: {label: "ic@backspace_outline", repeatable: true, send: BackSpace}
+  BackSpace: {label: "ic@backspace_outline", repeatable: true, send: BackSpace, functional: true}
   Clear: {label: 清空, text: "{Control+a}{BackSpace}"}
   Delete: {label: 删除, send: Delete}
   select_all: {label: 全选, send: Control+a}
@@ -414,10 +410,10 @@ preset_keys:
   copy: {label: 复制, send: Control+c}
   paste: {label: 粘贴, send: Control+v}
   CommitComment: {label: 编码, send: Control+Shift+Return}
-  Mode_switch: {toggle: ascii_mode, send: SWITCH_CHARSET, states: [ 中, EN ]}
-  Keyboard_symbols: {label: '!@#', send: Eisu_toggle, select: symbols}
-  Keyboard_number: {label: '123', send: Eisu_toggle, select: number}
-  Keyboard_default: {label: 返回, send: Eisu_toggle, select: .default}
+  Mode_switch: {toggle: ascii_mode, send: SWITCH_CHARSET, functional: true, states: [ 中, EN ]}
+  Keyboard_symbols: {label: '!@#', send: Eisu_toggle, select: symbols, functional: true}
+  Keyboard_number: {label: '123', send: Eisu_toggle, select: number, functional: true}
+  Keyboard_default: {label: 返回, send: Eisu_toggle, select: .default, functional: true}
   Menu: {label: 方案, send: MENU}
   Date: {label: 日期, command: date, option: "yyyy-MM-dd"}
   Time: {label: 时间, command: date, option: "HH:mm:ss"}
@@ -457,7 +453,7 @@ preset_keyboards:
     - {click: 'k', long_click: ':'}
     - {click: 'l', long_click: ';'}
     - {width: 5}
-    - {click: Shift_L, send_bindings: false, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Shift_L, send_bindings: false, width: 15}
     - {click: 'z', long_click: '`'}
     - {click: 'x', long_click: cut}
     - {click: 'c', long_click: copy}
@@ -465,14 +461,14 @@ preset_keyboards:
     - {click: 'b', long_click: Time, swipe_up: Date}
     - {click: 'n', long_click: '"'}
     - {click: 'm', long_click: "'"}
-    - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Keyboard_symbols, width: 9, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Keyboard_number, width: 9, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15}
+    - {click: Keyboard_symbols, width: 9}
+    - {click: Keyboard_number, width: 9}
     - {click: ',', long_click: '<', width: 9}
     - {click: space, long_click: VOICE_HOLD, width: 28}
     - {click: '.', long_click: '>', width: 9}
-    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Mode_switch, long_click: Menu, width: 11, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10}
+    - {click: Mode_switch, long_click: Menu, width: 11}
     - {click: Return, composing: Return1, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
   # Until rime_ice has been deployed (about three minutes after a fresh install) the
   # active schema is another one, and Trime then falls back to these layouts. Tacit has
@@ -495,12 +491,12 @@ preset_keyboards:
     - {click: Left1}
     - {click: Up}
     - {click: Right1}
-    - {click: BackSpace, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: BackSpace}
     - {click: cut}
     - {click: Left}
-    - {click: Shift_L2, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Shift_L2}
     - {click: Right}
-    - {click: space1, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: space1}
     - {click: copy}
     - {click: Home}
     - {click: Down}
@@ -510,7 +506,7 @@ preset_keyboards:
     - {click: undo}
     - {click: Tab1}
     - {click: redo}
-    - {click: Keyboard_default, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Keyboard_default}
   # Same as the base symbols layout, without the key that opened the theme list, and with
   # Simplified labels (via the preset keys above).
   symbols:
@@ -558,10 +554,10 @@ preset_keyboards:
     - {click: '”', ascii: "'", long_click: '’'}
     - {click: '，', ascii: ',', long_click: one_hand_switch_1}
     - {click: '？', ascii: '?', long_click: one_hand_switch_2}
-    - {click: BackSpace, long_click: Clear, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Keyboard_default, long_click: Menu, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
-    - {click: Keyboard_number, long_click: Color_switch, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: BackSpace, long_click: Clear}
+    - {click: Keyboard_default, long_click: Menu, width: 12}
+    - {click: Keyboard_number, long_click: Color_switch, width: 12}
     - {click: space, width: 30}
     - {click: '。', ascii: '.', width: 12}
-    - {click: liquid_keyboard_switch, long_click: Delete, width: 12, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: liquid_keyboard_switch, long_click: Delete, width: 12}
     - {click: Return, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

@@ -25,6 +25,7 @@ import com.osfans.trime.data.prefs.AppPrefs
 import com.osfans.trime.data.theme.Theme
 import com.osfans.trime.data.theme.ThemeScope
 import com.osfans.trime.ime.bar.InputBarDelegate
+import com.aar0u.tacit.voice.VoiceDictation
 import com.osfans.trime.ime.broadcast.EnterKeyDisplayDelegate
 import com.osfans.trime.ime.broadcast.InputBroadcastReceiver
 import com.osfans.trime.ime.broadcast.InputBroadcaster
@@ -168,7 +169,7 @@ class InputView(
     /** Redraws the voice key, the space bar and the toolbar button when recording starts or stops. */
     fun refreshVoiceState(recording: Boolean) {
         keyboardWindow.refreshColors()
-        inputBar.updateToggle("_voice_input", recording)
+        inputBar.updateToggle(VoiceDictation.TOGGLE_OPTION, recording)
     }
 
     /** Restyles colors after a scheme switch without rebuilding the view tree. */

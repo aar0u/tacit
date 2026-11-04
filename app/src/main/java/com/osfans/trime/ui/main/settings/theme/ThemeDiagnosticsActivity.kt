@@ -54,8 +54,7 @@ class ThemeDiagnosticsActivity : AppCompatActivity() {
         setContentView(binding.root)
         val theme = ThemeManager.activeTheme
         val findings = ThemeManager.activeFindings
-        val themeId = ThemeManager.prefs.selectedTheme.getValue()
-        val report = DeviceInfo.get(this) + ThemeDiagnostics.format(themeId, theme.name, findings)
+        val report = DeviceInfo.get(this) + ThemeDiagnostics.format(ThemeManager.TACIT_THEME, theme.name, findings)
 
         with(binding) {
             setSupportActionBar(diagnosticsToolbar.toolbar)

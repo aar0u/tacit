@@ -31,7 +31,6 @@ import com.osfans.trime.ime.symbol.LiquidWindow
 import com.osfans.trime.ime.window.BoardWindowManager
 import com.osfans.trime.ui.main.settings.ColorPickerDialog
 import com.osfans.trime.ui.main.settings.SoundEffectPickerDialog
-import com.osfans.trime.ui.main.settings.ThemePickerDialog
 import com.osfans.trime.util.AppUtils
 import com.osfans.trime.util.InputMethodUtils
 import com.osfans.trime.util.buildIntentFromAction
@@ -63,14 +62,6 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
         rime.launchOnReady { api ->
             service.lifecycleScope.launch {
                 service.showDialog(dialog(api))
-            }
-        }
-    }
-
-    private fun showThemePicker() {
-        showDialog { api ->
-            ThemePickerDialog.build(service.lifecycleScope, context) {
-                api.commitComposition()
             }
         }
     }
@@ -165,15 +156,13 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                         val isEnabled = api.getRuntimeOption(option)
                         val isComposing = api.statusCached.isComposing
                         api.setRuntimeOption(option, !isEnabled)
-                        // Trime no longer acts on the one-hand options itself, so squeeze the keyboard here.
-                        val mode = when (option) {
-                            "_one_hand_mode_1" -> KeyboardWindow.OneHandMode.LEFT
-                            "_one_hand_mode_2" -> KeyboardWindow.OneHandMode.RIGHT
-                            else -> null
-                        }
-                        if (mode != null) {
-                            val other = if (mode == KeyboardWindow.OneHandMode.LEFT) "_one_hand_mode_2" else "_one_hand_mode_1"
-                            if (!isEnabled) api.setRuntimeOption(other, false)
+                        // Nothing else in Trime acts on the one-hand options, so squeeze the keyboard here.
+                        KeyboardWindow.OneHandMode.fromOption(option)?.let { mode ->
+                            if (!isEnabled) {
+                                KeyboardWindow.OneHandMode.entries
+                                    .filter { it != mode && it != KeyboardWindow.OneHandMode.NONE }
+                                    .forEach { api.setRuntimeOption(it.option, false) }
+                            }
                             keyboardWindow.setOneHandMode(if (isEnabled) KeyboardWindow.OneHandMode.NONE else mode)
                         }
                         if (option == "ascii_mode" && isComposing) {
@@ -202,7 +191,6 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                     "menu_keyboard" -> windowManager.attachWindow(SwitchOptionWindow(di))
                     "clipboard_window" -> handleClipboardWindow(arg)
                     "set_color_scheme" -> handleColorScheme(arg)
-                    "set_theme" -> handleTheme(arg)
                     "broadcast" -> service.sendBroadcast(Intent(arg))
                     "clipboard" -> handleClipboard()
                     "commit" -> service.commitText(arg)
@@ -251,20 +239,6 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
             private fun handleColorScheme(arg: String) {
                 if (arg in ThemeManager.activeTheme.presetColorSchemes) {
                     ColorManager.setColorScheme(arg)
-                }
-            }
-
-            private fun handleTheme(arg: String) {
-                if (arg.isEmpty()) {
-                    // 参数为空时，刷新当前主题
-                    val themeId = ThemeManager.prefs.selectedTheme.getValue()
-                    service.lifecycleScope.launch { ThemeManager.selectTheme(themeId) }
-                } else {
-                    // 通过主题名称查找对应的配置ID并切换主题
-                    ThemeManager.getAllThemes()
-                        .find { it.name.equals(arg, ignoreCase = true) }?.let { item ->
-                            service.lifecycleScope.launch { ThemeManager.selectTheme(item.configId) }
-                        }
                 }
             }
 

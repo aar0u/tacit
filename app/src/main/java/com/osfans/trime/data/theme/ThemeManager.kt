@@ -147,17 +147,12 @@ object ThemeManager {
     }
 
     /**
-     * Switches to theme [configId], falling back when it is unavailable.
+     * Reads the theme again, for example after a deploy refreshed its files.
      * Loading runs on [Dispatchers.IO]; state changes and listener callbacks run on the main thread.
-     * @return the config id actually in effect; differs from [configId] when a fallback was used.
      */
-    suspend fun selectTheme(configId: String): String {
-        val resolvedTheme = withContext(Dispatchers.IO) { getThemeById(configId) }
-        return withContext(Dispatchers.Main.immediate) {
-            applyTheme(resolvedTheme)
-            prefs.selectedTheme.setValue(resolvedTheme.configId)
-            resolvedTheme.configId
-        }
+    suspend fun reloadTheme() {
+        val resolvedTheme = withContext(Dispatchers.IO) { getThemeById(TACIT_THEME) }
+        withContext(Dispatchers.Main.immediate) { applyTheme(resolvedTheme) }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

@@ -20,6 +20,13 @@ class TacitThemeTest :
             }
         }
 
+        "every scheme colors functional keys, which the layouts no longer color one by one" {
+            val needed = listOf("off_key_back_color", "off_key_text_color", "hilited_off_key_back_color")
+            for (scheme in theme.presetColorSchemes.values.filter { it["author"] == "Tacit" }) {
+                for (key in needed) (key in scheme) shouldBe true
+            }
+        }
+
         "only Tacit color schemes are kept" {
             val own = theme.presetColorSchemes.filterValues { it["author"] == "Tacit" }
             own.size shouldBe 12

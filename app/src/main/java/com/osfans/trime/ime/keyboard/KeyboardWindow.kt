@@ -82,8 +82,20 @@ class KeyboardWindow(di: DI) :
         get() = KeyboardWindow
 
     private val presetKeyboardIds = theme.presetKeyboards.keys.toList()
-    /** Squeezes the keyboard to one side of the screen so it can be reached with one thumb. */
-    enum class OneHandMode { NONE, LEFT, RIGHT }
+    /**
+     * Squeezes the keyboard to one side of the screen so it can be reached with one thumb.
+     * [option] is the runtime option of the theme's switch key that turns the mode on.
+     */
+    enum class OneHandMode(val option: String) {
+        NONE(""),
+        LEFT("_one_hand_mode_1"),
+        RIGHT("_one_hand_mode_2"),
+        ;
+
+        companion object {
+            fun fromOption(option: String) = entries.firstOrNull { it != NONE && it.option == option }
+        }
+    }
 
     private var oneHandMode = OneHandMode.NONE
 
