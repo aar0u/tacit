@@ -13,5 +13,17 @@ git config merge.ours.driver true
 git config rerere.enabled true
 
 git fetch upstream --tags
-git merge --no-ff "$ref"
+git merge --no-ff "$ref" || true
+
+# merge=ours does not cover files we deleted and upstream changed; keep them deleted.
+for f in nightly-ci release-ci pull-request-ci check-ci; do
+  p=".github/workflows/$f.yml"
+  if git ls-files -u -- "$p" | grep -q .; then git rm -q "$p"; fi
+done
+
+if git ls-files -u | grep -q .; then
+  echo "Unresolved conflicts remain. Fix them, then run: git commit --no-edit" >&2
+  exit 1
+fi
+if git rev-parse -q --verify MERGE_HEAD >/dev/null; then git commit --no-edit; fi
 git submodule update --init --recursive
