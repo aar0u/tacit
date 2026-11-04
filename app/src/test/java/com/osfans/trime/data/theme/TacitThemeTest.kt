@@ -27,6 +27,16 @@ class TacitThemeTest :
             }
         }
 
+        "no symbol tab has a key that no font can draw" {
+            val liquid = theme.liquidKeyboard
+            val tabs = liquid.getTagList().indices.filter { liquid.getTagList()[it].label != "更多" }
+            val broken = tabs.flatMap { liquid.getDataByIndex(it) }.map { it.text }.filter { text ->
+                text.any { Character.getType(it) == Character.PRIVATE_USE.toInt() } ||
+                    text.firstOrNull()?.let { Character.getType(it) == Character.NON_SPACING_MARK.toInt() } == true
+            }
+            broken shouldBe emptyList()
+        }
+
         "only Tacit color schemes are kept" {
             val own = theme.presetColorSchemes.filterValues { it["author"] == "Tacit" }
             own.size shouldBe 12

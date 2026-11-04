@@ -37,6 +37,9 @@ class Keyboard(
     private val keyHeight: Int =
         resolvePositive(selfConfig?.height?.toInt(), theme.style.keyHeight)
 
+    /** Size of single-character labels on this layout; 0 means the style's. */
+    internal val keyTextSize: Float = selfConfig?.keyTextSize ?: 0f
+
     /** 默認行距  */
     internal val verticalGap: Int =
         resolvePositive(selfConfig?.verticalGap, theme.style.verticalGap) { context.dp(it) }

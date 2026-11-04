@@ -31,9 +31,6 @@ class BoardWindowManager(override val di: DI) : DIAware {
     private var currentWindow: BoardWindow? = null
     private var currentView: View? = null
 
-    /** The window on screen, so a toolbar button can close the panel it opened. */
-    val currentWindowOrNull: BoardWindow? get() = currentWindow
-
     private fun prepareAnimation(
         exitAnimation: Transition?,
         enterAnimation: Transition?,

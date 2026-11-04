@@ -37,6 +37,7 @@ data class TextKeyboard(
     val keyHintOffsetY: Float = 0f,
     val keyPressOffsetX: Float = 0f,
     val keyPressOffsetY: Float = 0f,
+    val keyTextSize: Float = 0f,
     val importPreset: String = "",
     val keys: List<TextKey> = emptyList(),
 ) {

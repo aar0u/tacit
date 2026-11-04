@@ -24,6 +24,20 @@ class LiquidAdapter(
         val ui: LiquidItemUi,
     ) : RecyclerView.ViewHolder(ui.root)
 
+    private var itemWidth = 0
+
+    /**
+     * Stretches the items so whole columns fill [available] pixels, with [gap] pixels between
+     * neighbours; the theme's single_width is the narrowest an item may get.
+     */
+    fun fitWidth(available: Int, gap: Int, minWidth: Int) {
+        val columns = (available / (minWidth + gap)).coerceAtLeast(1)
+        val width = available / columns - gap
+        if (width == itemWidth) return
+        itemWidth = width
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(
         context: Context,
         parent: ViewGroup,
@@ -33,9 +47,6 @@ class LiquidAdapter(
         ui.mainText.apply {
             scaleMode = AutoScaleTextView.Mode.Proportional
             gravity = gravityCenter
-            updateLayoutParams {
-                width = context.dp(scope.theme.liquidKeyboard.singleWidth)
-            }
         }
         return ViewHolder(ui)
     }
@@ -47,6 +58,9 @@ class LiquidAdapter(
     ) {
         item ?: return
         holder.ui.refreshColors()
+        holder.ui.mainText.updateLayoutParams {
+            width = itemWidth.takeIf { it > 0 } ?: holder.ui.ctx.dp(scope.theme.liquidKeyboard.singleWidth)
+        }
         // Single symbols and emoji keep the key size; words such as the tab names use the long-label size.
         val style = scope.theme.style
         holder.ui.mainText.textSize =

@@ -104,7 +104,8 @@ class TabUi(
                 lParams(matchConstraints, size) {
                     centerVertically()
                     if (showTitle) {
-                        after(titleText, dp(8))
+                        // Without a title, such as the emoji tabs, sit right next to the arrow.
+                        if (titleText.text.isEmpty()) after(backButton) else after(titleText, dp(8))
                         endOfParent()
                     } else {
                         centerHorizontally()

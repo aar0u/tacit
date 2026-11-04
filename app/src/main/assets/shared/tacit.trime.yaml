@@ -25,7 +25,7 @@ style:
   candidate_text_size: 22
   candidate_view_height: 40
   comment_text_size: 12
-  keyboard_height: 280
+  keyboard_height: 240
   enter_labels:
     go: 前往
     done: 完成
@@ -336,8 +336,17 @@ preset_color_schemes:
 # The "more" panel (symbols, emoji, lists). Its bar draws labels as plain text, so it
 # uses glyph keys, not the icon-font ones of the main keyboard.
 liquid_keyboard:
+  # The narrowest an item may be; the panel widens items so whole columns fill a row.
+  single_width: 44
+  # The ← in the bar above leaves the panel, so there is no exit key here.
   fixed_key_bar:
-    keys: [liquid_keyboard_exit, space1, BackSpace_text, Return_text, clipboard_window, liquid_keyboard_switch]
+    keys: [space1, BackSpace_text, Return_text, clipboard_window, liquid_keyboard_switch]
+  # Upstream's list without 组合 (combing): its keys are combining marks, which draw as
+  # broken shapes when typed alone. A list replaces the upstream one, so it is spelled out.
+  keyboards: [emoji, math, ascii, cn, history, symbollist, list, ids, symbol, tabs, pinyin, script_symbols, jp, grease, rusa, korea, lation, yinbiao, unit, yanwenzi, emoji_full]
+  # Upstream spells ế and ǹ with private-use characters (U+E7C7, U+E7C8) that no font draws.
+  pinyin:
+    keys: "āáǎàōóēéěèǒòīíǐìūúǖǘǚǜǔùêếüńňǹㄚㄛㄜㄧㄨㄩㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ"
 
 # The bar above the keys: menu, hide, emoji, clipboard history, cursor and selection
 # keys, voice and the Chinese/English switch. Icons come from the bundled icon font.
@@ -365,7 +374,7 @@ tool_bar:
       action: liquid_keyboard_emoji
     - foreground: {style: "ic@clipboard_text_outline", normal: candidate_text_color}
       action: clipboard_window
-    - foreground: {style: "ic@cursor_text", normal: candidate_text_color}
+    - foreground: {style: "ic@cursor_move", normal: candidate_text_color}
       action: Keyboard_editor
   # No voice or 中/En button here: the bottom row of the keyboard already has both.
 
@@ -396,7 +405,8 @@ preset_keys:
   VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, functional: true, states: [ "ic@microphone_outline", "ic@microphone" ]}
   # Long press on the space bar: record while held.
   VOICE_HOLD: {label: 按住说话, send: VOICE_ASSIST, option: hold}
-  space: {toggle: _voice_input, send: space, repeatable: false, functional: false, states: [ ' ', "ic@microphone" ]}
+  # The key lights up while recording (see Key.appearanceType), so its label stays.
+  space: {label: '␣', send: space, repeatable: false, functional: false}
   # Functional keys take the off_key_* colors of the color scheme.
   Shift_L: {label: "ic@arrow_up_bold_outline", send: Shift_L, shift_lock: ascii_long, functional: true}
   Return: {label: "ic@keyboard_return", send: Return}
@@ -432,43 +442,50 @@ preset_keyboards:
     key_press_offset_x: 2
     key_press_offset_y: 2
     keys:
-    - {click: 'q', long_click: '!', swipe_up: 1}
-    - {click: 'w', long_click: '@', swipe_up: 2}
-    - {click: 'e', long_click: '#', swipe_up: 3}
-    - {click: 'r', long_click: '$', swipe_up: 4}
-    - {click: 't', long_click: '%', swipe_up: 5}
-    - {click: 'y', long_click: '^', swipe_up: 6}
-    - {click: 'u', long_click: '&', swipe_up: 7}
-    - {click: 'i', long_click: '*', swipe_up: 8}
-    - {click: 'o', long_click: '(', swipe_up: 9}
-    - {click: 'p', long_click: 'Hide', swipe_up: 0}
+    # Two alternatives per key, as in CyIME: swipe up (label above the letter) gives a digit
+    # or a Chinese full-width mark, long press (hint below) gives the half-width symbol.
+    # The long-press symbols are committed as typed: sent as keys, Rime would turn them into
+    # full-width marks in Chinese mode.
+    - {click: 'q', swipe_up: 1, label_symbol: '1', long_click: {commit: '!'}, hint: '!'}
+    - {click: 'w', swipe_up: 2, label_symbol: '2', long_click: {commit: '@'}, hint: '@'}
+    - {click: 'e', swipe_up: 3, label_symbol: '3', long_click: {commit: '#'}, hint: '#'}
+    - {click: 'r', swipe_up: 4, label_symbol: '4', long_click: {commit: '$'}, hint: '$'}
+    - {click: 't', swipe_up: 5, label_symbol: '5', long_click: {commit: '%'}, hint: '%'}
+    - {click: 'y', swipe_up: 6, label_symbol: '6', long_click: {commit: '^'}, hint: '^'}
+    - {click: 'u', swipe_up: 7, label_symbol: '7', long_click: {commit: '&'}, hint: '&'}
+    - {click: 'i', swipe_up: 8, label_symbol: '8', long_click: {commit: '*'}, hint: '*'}
+    - {click: 'o', swipe_up: 9, label_symbol: '9', long_click: {commit: '('}, hint: '('}
+    - {click: 'p', swipe_up: 0, label_symbol: '0', long_click: {commit: ')'}, hint: ')'}
     - {width: 5}
-    - {click: 'a', long_click: select_all, swipe_left: Left, swipe_right: Right, swipe_up: Up, swipe_down: Down}
-    - {click: 's', long_click: '~', swipe_left: Home, swipe_right: End, swipe_up: Page_Up, swipe_down: Page_Down}
-    - {click: 'd', long_click: '-', swipe_down: '_'}
-    - {click: 'f', long_click: '+', swipe_down: '='}
-    - {click: 'g', long_click: '\', swipe_down: '|'}
-    - {click: 'h', long_click: '[', swipe_left: '[', swipe_right: ']'}
-    - {click: 'j', long_click: '{', swipe_left: '{', swipe_right: '}'}
-    - {click: 'k', long_click: ':'}
-    - {click: 'l', long_click: ';'}
+    - {click: 'a', swipe_up: '～', label_symbol: '～', long_click: {commit: '~'}, hint: '~'}
+    - {click: 's', swipe_up: '—', label_symbol: '—', long_click: {commit: '-'}, hint: '-'}
+    - {click: 'd', swipe_up: '…', label_symbol: '…', long_click: {commit: '_'}, hint: '_'}
+    - {click: 'f', swipe_up: '·', label_symbol: '·', long_click: {commit: "'"}, hint: "'"}
+    - {click: 'g', swipe_up: '¥', label_symbol: '¥', long_click: {commit: '='}, hint: '='}
+    - {click: 'h', swipe_up: '、', label_symbol: '、', long_click: {commit: '\'}, hint: '\'}
+    - {click: 'j', swipe_up: '【', label_symbol: '【', long_click: {commit: '['}, hint: '['}
+    - {click: 'k', swipe_up: '】', label_symbol: '】', long_click: {commit: ']'}, hint: ']'}
+    - {click: 'l', swipe_up: '！', label_symbol: '！', long_click: {commit: '/'}, hint: '/'}
     - {width: 5}
     - {click: Shift_L, send_bindings: false, width: 15}
-    - {click: 'z', long_click: '`'}
-    - {click: 'x', long_click: cut}
-    - {click: 'c', long_click: copy}
-    - {click: 'v', long_click: paste}
-    - {click: 'b', long_click: Time, swipe_up: Date}
-    - {click: 'n', long_click: '"'}
-    - {click: 'm', long_click: "'"}
+    - {click: 'z', swipe_up: '（', label_symbol: '（', long_click: {commit: '"'}, hint: '"'}
+    - {click: 'x', swipe_up: '）', label_symbol: '）', long_click: {commit: '`'}, hint: '`'}
+    - {click: 'c', swipe_up: '：', label_symbol: '：', long_click: {commit: ':'}, hint: ':'}
+    - {click: 'v', swipe_up: '；', label_symbol: '；', long_click: {commit: ';'}, hint: ';'}
+    - {click: 'b', swipe_up: '《', label_symbol: '《', long_click: {commit: '<'}, hint: '<'}
+    - {click: 'n', swipe_up: '》', label_symbol: '》', long_click: {commit: '>'}, hint: '>'}
+    - {click: 'm', swipe_up: '？', label_symbol: '？', long_click: {commit: '?'}, hint: '?'}
     - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15}
     - {click: Keyboard_symbols, width: 9}
     - {click: Keyboard_number, width: 9}
-    - {click: ',', long_click: '<', width: 9}
+    # The key shows the Chinese mark it types; the corner shows the half-width one, which a
+    # swipe up or a long press commits (CyIME takes both as well).
+    - {click: ',', label: '，', label_symbol: ',', swipe_up: {commit: ','}, long_click: {commit: ','}, width: 9}
     - {click: space, long_click: VOICE_HOLD, width: 28}
-    - {click: '.', long_click: '>', width: 9}
-    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', width: 10}
-    - {click: Mode_switch, long_click: Menu, width: 11}
+    - {click: '.', label: '。', label_symbol: '.', swipe_up: {commit: '.'}, long_click: {commit: '.'}, width: 9}
+    # Smaller than the letters, so the voice and 中/EN keys do not outshine them.
+    - {click: VOICE_ASSIST, key_text_size: 16, width: 10}
+    - {click: Mode_switch, long_click: Menu, key_text_size: 16, width: 11}
     - {click: Return, composing: Return1, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
   # Until rime_ice has been deployed (about three minutes after a fresh install) the
   # active schema is another one, and Trime then falls back to these layouts. Tacit has
@@ -506,14 +523,43 @@ preset_keyboards:
     - {click: undo}
     - {click: Tab1}
     - {click: redo}
-    - {click: Keyboard_default}
+    - {click: Delete}
   # Same as the base symbols layout, without the key that opened the theme list, and with
   # Simplified labels (via the preset keys above).
+  # Upstream's number pad with the 返回 key at the small word size, like the symbols keyboard's.
+  number:
+    keys:
+    - {click: '+'}
+    - {click: 'KP_1'}
+    - {click: 'KP_2'}
+    - {click: 'KP_3'}
+    - {click: '#'}
+    - {click: '-'}
+    - {click: 'KP_4'}
+    - {click: 'KP_5'}
+    - {click: 'KP_6'}
+    - {click: '%'}
+    - {click: '*'}
+    - {click: 'KP_7'}
+    - {click: 'KP_8'}
+    - {click: 'KP_9'}
+    - {click: ':'}
+    - {click: '/'}
+    - {click: '±'}
+    - {click: 'KP_0'}
+    - {click: '.'}
+    - {click: ','}
+    - {click: '='}
+    - {click: Keyboard_default, long_click: Keyboard_symbols, key_text_size: 14}
+    - {click: space}
+    - {click: BackSpace}
+    - {click: Return}
   symbols:
     name: 符号
     ascii_mode: 1
     width: 10
     height: 56
+    key_text_size: 20
     keys:
     - {click: '1'}
     - {click: '2'}
@@ -555,9 +601,9 @@ preset_keyboards:
     - {click: '，', ascii: ',', long_click: one_hand_switch_1}
     - {click: '？', ascii: '?', long_click: one_hand_switch_2}
     - {click: BackSpace, long_click: Clear}
-    - {click: Keyboard_default, long_click: Menu, width: 12}
-    - {click: Keyboard_number, long_click: Color_switch, width: 12}
+    - {click: Keyboard_default, long_click: Menu, key_text_size: 14, width: 12}
+    - {click: Keyboard_number, long_click: Color_switch, key_text_size: 14, width: 12}
     - {click: space, width: 30}
     - {click: '。', ascii: '.', width: 12}
-    - {click: liquid_keyboard_switch, long_click: Delete, width: 12}
+    - {click: liquid_keyboard_switch, long_click: Delete, key_text_size: 14, width: 12}
     - {click: Return, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

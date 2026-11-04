@@ -271,6 +271,7 @@ class InputBarDelegate(override val di: DI) :
 
             evalAlwaysUiState()
             isAlwaysUiBuilt = true
+            keyboardWindow.onKeyboardSwitched = ::syncPanelTitle
             ClipboardHelper.addOnUpdateListener(onClipboardUpdateListener)
             syncToolbarOptionStates()
         }
@@ -304,6 +305,23 @@ class InputBarDelegate(override val di: DI) :
                 windowManager.attachWindow(KeyboardWindow)
             }
             barStateMachine.push(QuickBarStateMachine.TransitionEvent.BarBoardWindowAttached)
+        } else {
+            // Back on the keyboard, which may still be showing the editor.
+            syncPanelTitle()
+        }
+    }
+
+    /** Shows "← title" in the bar while the keyboard window displays a panel, like the other panels do. */
+    private fun syncPanelTitle() {
+        val title = keyboardWindow.panelTitle
+        if (title != null) {
+            tabUi.setTitle(title)
+            tabUi.setBackButtonOnClickListener { keyboardWindow.switchKeyboard(".default") }
+            barStateMachine.push(QuickBarStateMachine.TransitionEvent.BarBoardWindowAttached)
+            isPanelTitleShown = true
+        } else if (isPanelTitleShown) {
+            isPanelTitleShown = false
+            barStateMachine.push(QuickBarStateMachine.TransitionEvent.WindowDetached)
         }
     }
 
@@ -383,6 +401,9 @@ class InputBarDelegate(override val di: DI) :
             }
         }
     }
+
+    private val keyboardWindow: KeyboardWindow by instance()
+    private var isPanelTitleShown = false
 
     init {
         // While Rime compiles its dictionaries nothing can be typed in Chinese, so say so.

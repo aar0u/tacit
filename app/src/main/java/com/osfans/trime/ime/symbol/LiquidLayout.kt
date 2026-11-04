@@ -166,7 +166,8 @@ class LiquidLayout(
             LiquidKeyboard.KeyBar.Position.BOTTOM -> {
                 add(
                     root,
-                    lParams {
+                    // Fill the space above the key bar; wrapping the items left a gap on the right.
+                    lParams(matchConstraints, matchConstraints) {
                         centerHorizontally()
                         topOfParent()
                         bottomToTopOf(fixedKeyBar)

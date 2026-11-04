@@ -23,12 +23,11 @@ import com.osfans.trime.ime.window.BoardWindowManager
 import com.osfans.trime.ime.window.ResidentWindow
 import org.kodein.di.DI
 import org.kodein.di.instance
+import splitties.dimensions.dp
 
 class LiquidWindow(di: DI) :
     BoardWindow.BarBoardWindow(di),
     ResidentWindow {
-    override val showTitle = false
-
     private val service: TrimeInputMethodService by instance()
     private val rime: RimeSession by instance()
     private val scope: ThemeScope by instance()
@@ -85,6 +84,18 @@ class LiquidWindow(di: DI) :
         recyclerView.apply {
             layoutManager = mainLayoutManager
             this.adapter = this@LiquidWindow.adapter
+            addOnLayoutChangeListener { v, left, _, right, _, _, _, _, _ ->
+                // The padding equals the space the item decoration adds on each side of an item.
+                val space = v.paddingLeft
+                // Changing the adapter inside a layout pass is not allowed, so wait for it to end.
+                v.post {
+                    this@LiquidWindow.adapter.fitWidth(
+                        available = right - left - 2 * space,
+                        gap = 2 * space,
+                        minWidth = context.dp(scope.theme.liquidKeyboard.singleWidth),
+                    )
+                }
+            }
         }
     }
 

@@ -25,6 +25,8 @@ import com.osfans.trime.util.sp
 import splitties.dimensions.dp
 import timber.log.Timber
 
+private const val CORNER_INSET = 4f
+
 @SuppressLint("ClickableViewAccessibility", "ViewConstructor")
 class KeyView(
     context: Context,
@@ -283,15 +285,18 @@ class KeyView(
         }
 
         val symbol = key.symbolLabel
-        if (symbol.isNotEmpty()) {
-            drawSymbol(canvas, symbol)
-        }
-
         val hint = key.hint
+        // A single character goes to a corner (symbol top right, hint bottom left), so it does
+        // not crowd the key's own label; a word such as 按住说话 stays centered.
+        if (symbol.isNotEmpty()) {
+            drawSymbol(canvas, symbol, corner = symbol.isSingleChar())
+        }
         if (hint.isNotEmpty()) {
-            drawSymbol(canvas, hint, isTop = false)
+            drawSymbol(canvas, hint, isTop = false, corner = hint.isSingleChar())
         }
     }
+
+    private fun String.isSingleChar() = codePointCount(0, length) == 1
 
     private fun drawBackground(canvas: Canvas, k: Key) {
         val bg = k.getBackgroundDrawable() ?: return
@@ -312,7 +317,13 @@ class KeyView(
 
     private fun drawLabel(canvas: Canvas, label: String) {
         val textColor = key.getTextColor()
-        val textSize = sp(key.keyTextSize.takeIf { it > 0 } ?: if (label.length > 1 && !label.isIconFont) keyboardView.keyLongTextSize else keyboardView.keyTextSize)
+        val defaultSize =
+            if (label.length > 1 && !label.isIconFont) {
+                keyboardView.keyLongTextSize
+            } else {
+                key.layoutTextSize.takeIf { it > 0 } ?: keyboardView.keyTextSize
+            }
+        val textSize = sp(key.keyTextSize.takeIf { it > 0 } ?: defaultSize)
 
         if (label.isIconFont) {
             drawIcon(canvas, label, textSize.toInt(), textColor, key.keyTextOffsetX, key.keyTextOffsetY)
@@ -375,7 +386,7 @@ class KeyView(
         icon.draw(canvas)
     }
 
-    private fun drawSymbol(canvas: Canvas, text: String, isTop: Boolean = true) {
+    private fun drawSymbol(canvas: Canvas, text: String, isTop: Boolean = true, corner: Boolean = false) {
         if (isTop && keyboardView.hideKeySymbol) return
         if (!isTop && keyboardView.hideKeyHint) return
 
@@ -391,6 +402,7 @@ class KeyView(
                 color = textColor
                 this.textSize = textSize
                 typeface = theme.fonts.symbol
+                textAlign = if (!corner) Paint.Align.CENTER else if (isTop) Paint.Align.RIGHT else Paint.Align.LEFT
             }
 
             val lines = text.split("\n")
@@ -398,7 +410,11 @@ class KeyView(
             val lineHeight = fontMetrics.descent - fontMetrics.ascent
             val totalHeight = lineHeight * lines.size
 
-            val centerX = (width - paddingLeft - paddingRight) / 2f + paddingLeft + sp(offsetX)
+            val centerX = when {
+                !corner -> (width - paddingLeft - paddingRight) / 2f + paddingLeft + sp(offsetX)
+                isTop -> width - paddingRight - sp(CORNER_INSET)
+                else -> paddingLeft + sp(CORNER_INSET)
+            }
             val startY = if (isTop) {
                 paddingTop - fontMetrics.top + sp(offsetY) - (totalHeight - lineHeight) / 2
             } else {

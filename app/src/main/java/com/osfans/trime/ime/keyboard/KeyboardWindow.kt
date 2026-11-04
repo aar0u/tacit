@@ -42,6 +42,7 @@ import splitties.views.dsl.core.matchParent
 import timber.log.Timber
 
 private const val ONE_HAND_WIDTH_RATIO = 0.8f
+private const val EDITOR_KEYBOARD = "editor"
 
 class KeyboardWindow(di: DI) :
     BoardWindow.NoBarBoardWindow(di),
@@ -111,7 +112,13 @@ class KeyboardWindow(di: DI) :
     }
 
     private var currentKeyboardId = ""
-    val keyboardId: String get() = currentKeyboardId
+
+    /** The title the bar shows next to a ← while a panel-like layout (the editor) is on screen. */
+    val panelTitle: String?
+        get() = selectKeyboardConfig(currentKeyboardId)?.name?.takeIf { currentKeyboardId == EDITOR_KEYBOARD }
+
+    var onKeyboardSwitched: (() -> Unit)? = null
+
     private var lastKeyboardId = ""
     private var lastLockKeyboardId = ""
     private var tempAsciiMode: Boolean? = null
@@ -234,6 +241,7 @@ class KeyboardWindow(di: DI) :
                 })
             }
         }
+        onKeyboardSwitched?.invoke()
     }
 
     private fun smartMatchKeyboard(): String {
