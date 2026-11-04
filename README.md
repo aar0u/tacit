@@ -26,7 +26,7 @@ English | [简体中文](README_sc.md)
 | Rebrand (`com.aar0u.tacit`, app name Tacit) | Done |
 | No `INTERNET` and no `RECORD_AUDIO` permission in the built APK | Verified on device |
 | CI build of a debug APK | Done |
-| Tacit theme (rounded keys, tinted function keys, simplified labels, dark mode) | In testing |
+| One theme, Tacit (rounded keys, tinted function keys, simplified labels) with six CyIME palettes: lavender, blue, black, mint, sakura, cream; each has a dark variant that follows the system | In testing |
 | [rime-ice](https://github.com/iDvel/rime-ice) Pinyin dictionary (no grammar model yet) | In testing |
 | Offline voice input in the keyboard (sherpa-onnx, X-ASR, Silero VAD) | In testing |
 | Key click vibration on by default | In testing |

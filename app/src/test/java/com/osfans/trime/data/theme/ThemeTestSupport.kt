@@ -12,9 +12,9 @@ import java.io.File
 /**
  * Decodes a theme from its source file, expanding the librime DSL subset the same way
  * [ThemeLoader] does but skipping the librime deploy step, which needs rime_jni and is
- * unavailable in JVM unit tests. Cross-file references cannot be resolved here; the
- * built-in themes only use same-file ones. Paths are relative to the app module directory
- * (the unit-test working directory).
+ * unavailable in JVM unit tests. Cross-file references resolve to files in the shared
+ * assets directory. Paths are relative to the app module directory (the unit-test
+ * working directory).
  */
 object ThemeTestSupport {
     /** The parser themes are read with in production, so fixtures see the same configuration. */
@@ -24,10 +24,14 @@ object ThemeTestSupport {
 
     /** Decodes [relativePath] and also returns the expanded node it came from. */
     fun themeAndNode(relativePath: String): Pair<Theme, YamlMap> {
-        val file = File(relativePath)
+        // Themes that Tacit no longer ships live in test resources and keep their coverage.
+        val file = File(relativePath).takeIf { it.isFile } ?: File("src/test/resources/themes", File(relativePath).name)
         check(file.isFile) { "Theme fixture not found: $relativePath (cwd=${File(".").absolutePath})" }
         val node = yaml.parseToYamlNode(file.readText())
-        val expanded = ThemeDslExpander.expand(file.nameWithoutExtension, node) { null }
+        val shared = File("src/main/assets/shared")
+        val expanded = ThemeDslExpander.expand(file.nameWithoutExtension, node) { id ->
+            File(shared, "$id.yaml").takeIf { it.isFile }?.let { yaml.parseToYamlNode(it.readText()) }
+        }
         val mapping = expanded.mapping
             ?: error("$relativePath: YAML root is not a mapping")
         return yaml.decodeFromYamlNode<Theme>(mapping) to mapping

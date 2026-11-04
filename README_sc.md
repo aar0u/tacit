@@ -26,7 +26,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 | 改名（`com.aar0u.tacit`，应用名 Tacit） | 已完成 |
 | 构建出的 APK 没有 `INTERNET` 和 `RECORD_AUDIO` 权限 | 已在真机验证 |
 | CI 构建调试版 APK | 已完成 |
-| Tacit 主题（圆角按键、功能键着色、简体标签、深色模式） | 测试中 |
+| 只有一个主题 Tacit（圆角按键、功能键着色、简体标签），配 CyIME 的六套配色：薰衣草紫、柔和蓝、纯黑、薄荷绿、樱花粉、奶油米，每套带跟随系统的深色版 | 测试中 |
 | 接入 [雾凇拼音](https://github.com/iDvel/rime-ice) 词库（暂无语法模型） | 测试中 |
 | 键盘内的离线语音输入（sherpa-onnx、X-ASR、Silero VAD） | 测试中 |
 | 默认开启按键震动 | 测试中 |

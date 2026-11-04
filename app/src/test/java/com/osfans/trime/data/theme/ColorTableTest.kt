@@ -154,7 +154,7 @@ class ColorTableTest :
                 }
             }
 
-            for (themeName in listOf("trime.yaml", "tongwenfeng.trime.yaml")) {
+            for (themeName in listOf("trime.yaml", "tongwenfeng.trime.yaml", "tacit.trime.yaml")) {
                 val theme = ThemeTestSupport.decodeBuiltinTheme(themeName)
                 When("the theme $themeName is loaded") {
                     for ((id, colors) in theme.presetColorSchemes) {

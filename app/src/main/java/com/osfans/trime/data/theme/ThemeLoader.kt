@@ -27,6 +27,8 @@ import java.io.File
 object ThemeLoader {
     const val CONFIG_VERSION_KEY = "config_version"
 
+    private const val TACIT_AUTHOR = "Tacit"
+
     private const val INCLUDE = "__include"
     private const val PATCH = "__patch"
 
@@ -144,7 +146,10 @@ object ThemeLoader {
         themeId: String,
         mapping: YamlMap,
     ): ThemeLoadResult {
-        val theme = ThemeYaml.parser.decodeFromYamlNode<Theme>(mapping)
+        val decoded = ThemeYaml.parser.decodeFromYamlNode<Theme>(mapping)
+        // Tacit ships one theme with a few palettes; hide the ones inherited from upstream.
+        val ownSchemes = decoded.presetColorSchemes.filterValues { it["author"] == TACIT_AUTHOR }
+        val theme = if (ownSchemes.isEmpty()) decoded else decoded.copy(presetColorSchemes = ownSchemes)
         if (theme.presetColorSchemes.isEmpty()) {
             return ThemeLoadResult.Failure(themeId, ThemeLoadError.NoColorScheme(themeId))
         }

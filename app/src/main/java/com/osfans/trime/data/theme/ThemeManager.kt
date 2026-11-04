@@ -19,6 +19,8 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 object ThemeManager {
+    const val TACIT_THEME = "tacit.trime"
+
     fun interface OnThemeChangeListener {
         fun onThemeChange(theme: Theme)
     }
@@ -117,12 +119,10 @@ object ThemeManager {
     }
 
     private fun evaluateActiveTheme(): Theme {
-        val selectedThemeId = prefs.selectedTheme.getValue()
-        val resolvedTheme = getThemeById(selectedThemeId)
+        // Tacit has one theme. A fallback used while the data files are still being
+        // copied must not be remembered, or it would stick after the copy finishes.
+        val resolvedTheme = getThemeById(TACIT_THEME)
         val newTheme = resolvedTheme.theme
-        if (resolvedTheme.configId != selectedThemeId) {
-            prefs.selectedTheme.setValue(resolvedTheme.configId)
-        }
         applyTheme(resolvedTheme)
         return newTheme
     }

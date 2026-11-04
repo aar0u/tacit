@@ -2,8 +2,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# Tacit theme: rounded white keys, tinted function keys, simplified labels.
-# It extends the upstream default theme, so only differences are listed here.
+# Tacit's only theme: rounded keys and tinted function keys, with the colour
+# palettes of CyIME (lavender, blue, black, mint, sakura, cream, each with a dark
+# variant that follows the system setting). It extends the upstream theme, so only
+# the differences are listed here. Colour schemes written by upstream are hidden:
+# ThemeLoader keeps only those whose author is "Tacit".
 # encoding: utf-8
 
 config_version: "3.0"
@@ -33,82 +36,281 @@ style:
 
 preset_color_schemes:
   default:
-    name: Tacit 浅色
+    name: 薰衣草紫
     author: Tacit
-    dark_scheme: tacit_dark
-    back_color: 0xe2e4ea
-    border_color: 0xc9cbd3
-    candidate_separator_color: 0xe2e4ea
-    candidate_text_color: 0x1b1b1f
-    comment_text_color: 0x6b6b76
-    hilited_back_color: 0xe8def8
+    dark_scheme: lavender_dark
+    back_color: 0xeee8f4
+    keyboard_back_color: 0xeee8f4
+    border_color: 0xd8d0e4
+    candidate_text_color: 0x25212c
+    comment_text_color: 0x685191
     hilited_candidate_back_color: 0xe8def8
-    hilited_candidate_text_color: 0x1d1b20
-    hilited_comment_text_color: 0x4a3b87
-    hilited_key_back_color: 0xd0bcff
-    hilited_key_symbol_color: 0x4a3b87
-    hilited_key_text_color: 0x1d1b20
-    hilited_off_key_back_color: 0xd0bcff
-    hilited_off_key_text_color: 0x1d1b20
-    hilited_on_key_back_color: 0xd0bcff
-    hilited_on_key_text_color: 0x1d1b20
-    hilited_text_color: 0x6750a4
-    key_back_color: 0xffffff
-    key_symbol_color: 0x6b6b76
-    key_text_color: 0x1b1b1f
-    keyboard_back_color: 0xe2e4ea
-    label_color: 0x6b6b76
-    off_key_back_color: 0xffffff
-    off_key_text_color: 0x1b1b1f
-    on_key_back_color: 0xe8def8
-    on_key_text_color: 0x4a3b87
-    preview_back_color: 0xffffff
-    preview_text_color: 0x1b1b1f
-    shadow_color: 0x00000000
-    text_color: 0x6750a4
-    text_back_color: 0xf3edff
+    hilited_candidate_text_color: 0x59417f
+    hilited_text_color: 0x8f73e2
+    text_color: 0x8f73e2
+    text_back_color: 0xe8def8
+    key_back_color: 0xfffbff
+    key_text_color: 0x25212c
+    key_symbol_color: 0x87838b
+    hilited_key_back_color: 0xe6ddf9
     func_key_back_color: 0xe8def8
-    func_key_text_color: 0x4a3b87
-    func_key_hilited_color: 0xd0bcff
-
-  tacit_dark:
-    name: Tacit 深色
+    func_key_text_color: 0x25212c
+    func_key_hilited_color: 0xc9b9f0
+    enter_key_back_color: 0x8f73e2
+    enter_key_text_color: 0xffffff
+  lavender_dark:
+    name: 薰衣草紫（深色）
     author: Tacit
     light_scheme: default
-    back_color: 0x1e1a3a
-    border_color: 0x39345c
-    candidate_separator_color: 0x1e1a3a
-    candidate_text_color: 0xf2eff7
-    comment_text_color: 0xc9c5d6
-    hilited_back_color: 0x4a4570
-    hilited_candidate_back_color: 0x4a4570
-    hilited_candidate_text_color: 0xffffff
-    hilited_comment_text_color: 0xe8def8
-    hilited_key_back_color: 0x8a86a0
-    hilited_key_symbol_color: 0xffffff
-    hilited_key_text_color: 0xffffff
-    hilited_off_key_back_color: 0x8a86a0
-    hilited_off_key_text_color: 0xffffff
-    hilited_on_key_back_color: 0x8a86a0
-    hilited_on_key_text_color: 0xffffff
+    back_color: 0x211e28
+    keyboard_back_color: 0x211e28
+    border_color: 0x3a3545
+    candidate_text_color: 0xf0eaf5
+    comment_text_color: 0xd0bcff
+    hilited_candidate_back_color: 0x605d77
+    hilited_candidate_text_color: 0xe9ddff
     hilited_text_color: 0xd0bcff
-    key_back_color: 0x6f6d80
-    key_symbol_color: 0xc9c5d6
-    key_text_color: 0xf2eff7
-    keyboard_back_color: 0x1e1a3a
-    label_color: 0xc9c5d6
-    off_key_back_color: 0x6f6d80
-    off_key_text_color: 0xf2eff7
-    on_key_back_color: 0x6750a4
-    on_key_text_color: 0xffffff
-    preview_back_color: 0x6f6d80
-    preview_text_color: 0xffffff
-    shadow_color: 0x00000000
     text_color: 0xd0bcff
-    text_back_color: 0x2b2650
-    func_key_back_color: 0x6750a4
+    text_back_color: 0x605d77
+    key_back_color: 0x38333f
+    key_text_color: 0xf0eaf5
+    key_symbol_color: 0x9d98a3
+    hilited_key_back_color: 0x595169
+    func_key_back_color: 0x605d77
+    func_key_text_color: 0xf0eaf5
+    func_key_hilited_color: 0x877ea7
+    enter_key_back_color: 0xd0bcff
+    enter_key_text_color: 0x202020
+  blue:
+    name: 柔和蓝
+    author: Tacit
+    dark_scheme: blue_dark
+    back_color: 0xeaeef5
+    keyboard_back_color: 0xeaeef5
+    border_color: 0xd4dbe7
+    candidate_text_color: 0x20242c
+    comment_text_color: 0x42639c
+    hilited_candidate_back_color: 0xdce6fa
+    hilited_candidate_text_color: 0x2c4d85
+    hilited_text_color: 0x42639c
+    text_color: 0x42639c
+    text_back_color: 0xdce6fa
+    key_back_color: 0xffffff
+    key_text_color: 0x20242c
+    key_symbol_color: 0x84878b
+    hilited_key_back_color: 0xd5dde9
+    func_key_back_color: 0xdce6fa
+    func_key_text_color: 0x20242c
+    func_key_hilited_color: 0xa6b8d9
+    enter_key_back_color: 0x42639c
+    enter_key_text_color: 0xffffff
+  blue_dark:
+    name: 柔和蓝（深色）
+    author: Tacit
+    light_scheme: blue
+    back_color: 0x191c22
+    keyboard_back_color: 0x191c22
+    border_color: 0x454c5b
+    candidate_text_color: 0xe9edf5
+    comment_text_color: 0xb4cafa
+    hilited_candidate_back_color: 0x495a7d
+    hilited_candidate_text_color: 0xdce6fa
+    hilited_text_color: 0xb4cafa
+    text_color: 0xb4cafa
+    text_back_color: 0x495a7d
+    key_back_color: 0x2e323a
+    key_text_color: 0xe9edf5
+    key_symbol_color: 0x9599a1
+    hilited_key_back_color: 0x4b5364
+    func_key_back_color: 0x495a7d
+    func_key_text_color: 0xe9edf5
+    func_key_hilited_color: 0x6e81a9
+    enter_key_back_color: 0xb4cafa
+    enter_key_text_color: 0x202020
+  black:
+    name: 纯黑
+    author: Tacit
+    dark_scheme: black_dark
+    back_color: 0xe8e8ea
+    keyboard_back_color: 0xe8e8ea
+    border_color: 0xcdcdcd
+    candidate_text_color: 0x202020
+    comment_text_color: 0x454545
+    hilited_candidate_back_color: 0xd4d4d8
+    hilited_candidate_text_color: 0x000000
+    hilited_text_color: 0x454545
+    text_color: 0x454545
+    text_back_color: 0xd4d4d8
+    key_back_color: 0xffffff
+    key_text_color: 0x202020
+    key_symbol_color: 0x848484
+    hilited_key_back_color: 0xd6d6d6
+    func_key_back_color: 0xd4d4d8
+    func_key_text_color: 0x202020
+    func_key_hilited_color: 0xa2a2a5
+    enter_key_back_color: 0xd4d4d8
+    enter_key_text_color: 0x202020
+  black_dark:
+    name: 纯黑（深色）
+    author: Tacit
+    light_scheme: black
+    back_color: 0x000000
+    keyboard_back_color: 0x000000
+    border_color: 0x353535
+    candidate_text_color: 0xffffff
+    comment_text_color: 0xe0e0e0
+    hilited_candidate_back_color: 0x29292b
+    hilited_candidate_text_color: 0xffffff
+    hilited_text_color: 0xe0e0e0
+    text_color: 0xe0e0e0
+    text_back_color: 0x29292b
+    key_back_color: 0x1c1c1e
+    key_text_color: 0xffffff
+    key_symbol_color: 0x99999a
+    hilited_key_back_color: 0x474749
+    func_key_back_color: 0x29292b
     func_key_text_color: 0xffffff
-    func_key_hilited_color: 0x7d67bd
+    func_key_hilited_color: 0x69696a
+    enter_key_back_color: 0x29292b
+    enter_key_text_color: 0xffffff
+  mint:
+    name: 薄荷绿
+    author: Tacit
+    dark_scheme: mint_dark
+    back_color: 0xd3f0d2
+    keyboard_back_color: 0xd3f0d2
+    border_color: 0xc9d5c9
+    candidate_text_color: 0x112e12
+    comment_text_color: 0x475046
+    hilited_candidate_back_color: 0xb4dcb3
+    hilited_candidate_text_color: 0x015e11
+    hilited_text_color: 0x015e11
+    text_color: 0x015e11
+    text_back_color: 0xb4dcb3
+    key_back_color: 0xf6fef6
+    key_text_color: 0x112e12
+    key_symbol_color: 0x788c79
+    hilited_key_back_color: 0xc0dbc4
+    func_key_back_color: 0xb4dcb3
+    func_key_text_color: 0x112e12
+    func_key_hilited_color: 0x75b07a
+    enter_key_back_color: 0x7cca7c
+    enter_key_text_color: 0x202020
+  mint_dark:
+    name: 薄荷绿（深色）
+    author: Tacit
+    light_scheme: mint
+    back_color: 0x071a07
+    keyboard_back_color: 0x071a07
+    border_color: 0x283128
+    candidate_text_color: 0xe9f4e9
+    comment_text_color: 0xb0bbb0
+    hilited_candidate_back_color: 0x132c13
+    hilited_candidate_text_color: 0x98e898
+    hilited_text_color: 0x98e898
+    text_color: 0x98e898
+    text_back_color: 0x132c13
+    key_back_color: 0x283d28
+    key_text_color: 0xe9f4e9
+    key_symbol_color: 0x92a292
+    hilited_key_back_color: 0x416341
+    func_key_back_color: 0x132c13
+    func_key_text_color: 0xe9f4e9
+    func_key_hilited_color: 0x426e42
+    enter_key_back_color: 0x37853a
+    enter_key_text_color: 0xffffff
+  sakura:
+    name: 樱花粉
+    author: Tacit
+    dark_scheme: sakura_dark
+    back_color: 0xffdce0
+    keyboard_back_color: 0xffdce0
+    border_color: 0xdeccce
+    candidate_text_color: 0x3e1820
+    comment_text_color: 0x57494b
+    hilited_candidate_back_color: 0xf9bdc5
+    hilited_candidate_text_color: 0x8b173b
+    hilited_text_color: 0x8b173b
+    text_color: 0x8b173b
+    text_back_color: 0xf9bdc5
+    key_back_color: 0xfffafb
+    key_text_color: 0x3e1820
+    key_symbol_color: 0x957e83
+    hilited_key_back_color: 0xe5c8d1
+    func_key_back_color: 0xf9bdc5
+    func_key_text_color: 0x3e1820
+    func_key_hilited_color: 0xd28395
+    enter_key_back_color: 0xfc9aaa
+    enter_key_text_color: 0x202020
+  sakura_dark:
+    name: 樱花粉（深色）
+    author: Tacit
+    light_scheme: sakura
+    back_color: 0x250b10
+    keyboard_back_color: 0x250b10
+    border_color: 0x372a2c
+    candidate_text_color: 0xfcebed
+    comment_text_color: 0xc4b2b4
+    hilited_candidate_back_color: 0x3b191f
+    hilited_candidate_text_color: 0xffbdc6
+    hilited_text_color: 0xffbdc6
+    text_color: 0xffbdc6
+    text_back_color: 0x3b191f
+    key_back_color: 0x4b2d31
+    key_text_color: 0xfcebed
+    key_symbol_color: 0xac9698
+    hilited_key_back_color: 0x734d52
+    func_key_back_color: 0x3b191f
+    func_key_text_color: 0xfcebed
+    func_key_hilited_color: 0x805259
+    enter_key_back_color: 0xe3125e
+    enter_key_text_color: 0xffffff
+  cream:
+    name: 奶油米
+    author: Tacit
+    dark_scheme: cream_dark
+    back_color: 0xf7e1d9
+    keyboard_back_color: 0xf7e1d9
+    border_color: 0xd8cfcc
+    candidate_text_color: 0x34211a
+    comment_text_color: 0x534b49
+    hilited_candidate_back_color: 0xe6c8bd
+    hilited_candidate_text_color: 0x62453b
+    hilited_text_color: 0x62453b
+    text_color: 0x62453b
+    text_back_color: 0xe6c8bd
+    key_back_color: 0xfffbf9
+    key_text_color: 0x34211a
+    key_symbol_color: 0x8f837e
+    hilited_key_back_color: 0xdcd3cf
+    func_key_back_color: 0xe6c8bd
+    func_key_text_color: 0x34211a
+    func_key_hilited_color: 0xb89a90
+    enter_key_back_color: 0xd1afa3
+    enter_key_text_color: 0x202020
+  cream_dark:
+    name: 奶油米（深色）
+    author: Tacit
+    light_scheme: cream
+    back_color: 0x1e110c
+    keyboard_back_color: 0x1e110c
+    border_color: 0x332c2a
+    candidate_text_color: 0xf6eeeb
+    comment_text_color: 0xbeb5b2
+    hilited_candidate_back_color: 0x32201a
+    hilited_candidate_text_color: 0xebc8bc
+    hilited_text_color: 0xebc8bc
+    text_color: 0xebc8bc
+    text_back_color: 0x32201a
+    key_back_color: 0x42332d
+    key_text_color: 0xf6eeeb
+    key_symbol_color: 0xa59a96
+    hilited_key_back_color: 0x67544c
+    func_key_back_color: 0x32201a
+    func_key_text_color: 0xf6eeeb
+    func_key_hilited_color: 0x735b53
+    enter_key_back_color: 0x8e6f64
+    enter_key_text_color: 0xffffff
 
 preset_keys:
   VOICE_ASSIST: {label: 语音, send: VOICE_ASSIST}
@@ -121,14 +323,24 @@ preset_keys:
   CommitComment: {label: 编码, send: Control+Shift+Return}
   Mode_switch: {toggle: ascii_mode, send: SWITCH_CHARSET, states: [ 中文, 英文 ]}
   Keyboard_symbols: {label: 符号, send: Eisu_toggle, select: symbols}
+  Keyboard_number: {label: 数字, send: Eisu_toggle, select: number}
   Menu: {label: 方案, send: MENU}
   Date: {label: 日期, command: date, option: "yyyy-MM-dd"}
   Time: {label: 时间, command: date, option: "HH:mm:ss"}
 
+# The keyboard Trime picks for a schema is the preset keyboard named after the
+# schema id, so this layout is what rime_ice shows. The base theme only provides
+# the 40-key "default" layout for it, which has no room for the voice key.
 preset_keyboards:
-  qwerty:
+  rime_ice:
     name: Tacit 26键
+    ascii_mode: 0
+    columns: 10
+    width: 10
     height: 56
+    lock: true
+    key_press_offset_x: 2
+    key_press_offset_y: 2
     keys:
     - {click: 'q', long_click: '!', swipe_up: 1}
     - {click: 'w', long_click: '@', swipe_up: 2}
@@ -138,7 +350,7 @@ preset_keyboards:
     - {click: 'y', long_click: '^', swipe_up: 6}
     - {click: 'u', long_click: '&', swipe_up: 7}
     - {click: 'i', long_click: '*', swipe_up: 8}
-    - {click: 'o', long_click: '(){Left}', swipe_up: 9}
+    - {click: 'o', long_click: '(', swipe_up: 9}
     - {click: 'p', long_click: 'Hide', swipe_up: 0}
     - {width: 5}
     - {click: 'a', long_click: select_all, swipe_left: Left, swipe_right: Right, swipe_up: Up, swipe_down: Down}
@@ -146,8 +358,8 @@ preset_keyboards:
     - {click: 'd', long_click: '-', swipe_down: '_'}
     - {click: 'f', long_click: '+', swipe_down: '='}
     - {click: 'g', long_click: '\', swipe_down: '|'}
-    - {click: 'h', long_click: '[]{Left}', swipe_left: '[', swipe_right: ']'}
-    - {click: 'j', long_click: '{}{Left}', swipe_left: '{', swipe_right: '}'}
+    - {click: 'h', long_click: '[', swipe_left: '[', swipe_right: ']'}
+    - {click: 'j', long_click: '{', swipe_left: '{', swipe_right: '}'}
     - {click: 'k', long_click: ':'}
     - {click: 'l', long_click: ';'}
     - {width: 5}
@@ -165,5 +377,5 @@ preset_keyboards:
     - {click: ',', long_click: '<'}
     - {click: space, width: 30}
     - {click: '.', long_click: '>'}
-    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?'}
-    - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?', key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}
+    - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

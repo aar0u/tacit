@@ -48,11 +48,6 @@ class SwitchOptionWindow(di: DI) :
     private val staticEntries by lazy {
         arrayOf(
             SwitchOptionEntry.Static(
-                context.getString(R.string.theme),
-                R.drawable.ic_baseline_color_lens_24,
-                SwitchOptionEntry.Static.Type.ThemeList,
-            ),
-            SwitchOptionEntry.Static(
                 context.getString(R.string.schemata),
                 R.drawable.ic_round_view_list_24,
                 SwitchOptionEntry.Static.Type.SchemaList,
