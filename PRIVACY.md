@@ -1,29 +1,27 @@
 <!--
-SPDX-FileCopyrightText: 2015 - 2024 Rime community
+SPDX-FileCopyrightText: 2026 Tacit contributors
 
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-## 隱私權政策
+# Privacy policy
 
-**同文**爲開源安卓漢語輸入法項目，讀取以下資訊是爲了協助使用者更快速的輸入文字。
-應用本身不會蒐集和上傳任何個人隱私數據至任何外部服務和伺服器，尤其用戶的輸入數據。
+Tacit is an open-source Android Pinyin input method. It does not collect, store off the device, or transmit anything you type.
 
-讀取如下資訊和權限：
+## What the app can access
 
-* 存儲空間：用於保存用戶詞典數據和配置信息。
-* 麥克風：用於系統語音輸入，如不需要可關閉。
+- **Network:** none. The app does not declare the `INTERNET` permission, so Android blocks all network traffic from it.
+- **Storage:** the app's own data directory, for your user dictionary and settings.
+- **Microphone:** not requested in the current version. When offline voice input is added, recognition will run on the device and audio will not be saved or sent anywhere.
 
-2017年7月25日更新
+## Backups
 
-## Privacy Policy
+`allowBackup` is off, so Android does not copy the app's data into cloud or device backups.
 
-**TRIME** is an open source project for Android input method.
-It won't collect or upload any user's privacy to any external service or server especially the user's input history.
+## Changes
 
-Permissions application needs:
+If a release adds a permission, this file and the README list it before the release.
 
-* Storage(NEED): Used to keep the dictionary data and configuration file.
-* Microphone(OPTIONAL): Used for voice input. 
+## 隐私政策
 
-Updated on 2017.7.25
+Tacit 是开源的安卓拼音输入法，不会收集、上传你输入的任何内容。应用没有声明 `INTERNET` 权限，系统会阻止它的一切网络访问；当前版本不申请麦克风权限，以后加入离线语音时，识别在本机完成，音频不会被保存或发送；`allowBackup` 已关闭。

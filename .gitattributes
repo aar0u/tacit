@@ -9,4 +9,5 @@
 # Tacit-owned files: on a sync with upstream, keep our version.
 # Needs `git config merge.ours.driver true` (script/sync-upstream.sh sets it).
 README*.md	merge=ours
+PRIVACY.md	merge=ours
 .github/workflows/*	merge=ours
