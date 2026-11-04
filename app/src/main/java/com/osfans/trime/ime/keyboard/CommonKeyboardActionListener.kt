@@ -165,6 +165,17 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                         val isEnabled = api.getRuntimeOption(option)
                         val isComposing = api.statusCached.isComposing
                         api.setRuntimeOption(option, !isEnabled)
+                        // Trime no longer acts on the one-hand options itself, so squeeze the keyboard here.
+                        val mode = when (option) {
+                            "_one_hand_mode_1" -> KeyboardWindow.OneHandMode.LEFT
+                            "_one_hand_mode_2" -> KeyboardWindow.OneHandMode.RIGHT
+                            else -> null
+                        }
+                        if (mode != null) {
+                            val other = if (mode == KeyboardWindow.OneHandMode.LEFT) "_one_hand_mode_2" else "_one_hand_mode_1"
+                            if (!isEnabled) api.setRuntimeOption(other, false)
+                            keyboardWindow.setOneHandMode(if (isEnabled) KeyboardWindow.OneHandMode.NONE else mode)
+                        }
                         if (option == "ascii_mode" && isComposing) {
                             api.getRawInput().takeIf { it.isNotEmpty() }?.let {
                                 service.commitText(it)

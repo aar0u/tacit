@@ -7,6 +7,7 @@ package com.osfans.trime.ime.keyboard
 import android.graphics.Point
 import android.os.Build
 import android.text.InputType
+import android.view.Gravity
 import android.view.View
 import android.view.WindowInsets
 import android.view.inputmethod.EditorInfo
@@ -39,6 +40,8 @@ import splitties.views.dsl.core.frameLayout
 import splitties.views.dsl.core.lParams
 import splitties.views.dsl.core.matchParent
 import timber.log.Timber
+
+private const val ONE_HAND_WIDTH_RATIO = 0.8f
 
 class KeyboardWindow(di: DI) :
     BoardWindow.NoBarBoardWindow(di),
@@ -79,6 +82,22 @@ class KeyboardWindow(di: DI) :
         get() = KeyboardWindow
 
     private val presetKeyboardIds = theme.presetKeyboards.keys.toList()
+    /** Squeezes the keyboard to one side of the screen so it can be reached with one thumb. */
+    enum class OneHandMode { NONE, LEFT, RIGHT }
+
+    private var oneHandMode = OneHandMode.NONE
+
+    fun setOneHandMode(mode: OneHandMode) {
+        if (mode == oneHandMode) return
+        oneHandMode = mode
+        refreshKeyboards(isAll = true)
+    }
+
+    private fun allowedKeyboardWidth(): Int {
+        val full = computeAllowedWidth()
+        return if (oneHandMode == OneHandMode.NONE) full else (full * ONE_HAND_WIDTH_RATIO).toInt()
+    }
+
     private var currentKeyboardId = ""
     val keyboardId: String get() = currentKeyboardId
     private var lastKeyboardId = ""
@@ -168,7 +187,7 @@ class KeyboardWindow(di: DI) :
         lastKeyboardId = target
 
         val config = selectKeyboardConfig(target)
-        val keyboard = activeKeyboard ?: Keyboard(context, theme, computeAllowedWidth(), config)
+        val keyboard = activeKeyboard ?: Keyboard(context, theme, allowedKeyboardWidth(), config)
         val view = currentKeyboardView ?: KeyboardView(context, theme, keyboard, popup, service, keyboardActionListener, enterKeyDisplay)
 
         if (activeKeyboard == null) {
@@ -197,7 +216,10 @@ class KeyboardWindow(di: DI) :
         view.let {
             keyboardView.apply {
                 (it.parent as? android.view.ViewGroup)?.removeView(it)
-                add(it, lParams(matchParent, matchParent))
+                val narrow = oneHandMode != OneHandMode.NONE
+                add(it, lParams(if (narrow) allowedKeyboardWidth() else matchParent, matchParent) {
+                    if (narrow) gravity = if (oneHandMode == OneHandMode.LEFT) Gravity.START else Gravity.END
+                })
             }
         }
     }
