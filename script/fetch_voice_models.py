@@ -2,9 +2,9 @@
 # SPDX-FileCopyrightText: 2026 Tacit contributors
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Download the speech models into voice/src/main/assets/models (not committed to git).
+"""Download the speech models into app/src/main/assets/voice/models (not committed to git).
 
-Run once before building the voice app: python3 script/fetch_voice_models.py
+Run once before building the app: python3 script/fetch_voice_models.py
 Files are checked against pinned SHA-256 hashes; the script needs network, the app does not.
 """
 import hashlib
@@ -15,7 +15,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "voice" / "src" / "main" / "assets" / "models"
+OUT = ROOT / "app" / "src" / "main" / "assets" / "voice" / "models"
 
 XASR_URL = (
     "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/"

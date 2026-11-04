@@ -473,7 +473,7 @@ keystore.properties
 # Project
 app/src/main/assets/checksums.json
 app/src/main/assets/shared/opencc
-voice/src/main/assets/models
+app/src/main/assets/voice/models
 
 # boost
 app/boost-*.tar.xz

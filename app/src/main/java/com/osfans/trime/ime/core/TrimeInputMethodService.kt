@@ -28,6 +28,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InlineSuggestionsRequest
 import android.view.inputmethod.InlineSuggestionsResponse
+import com.aar0u.tacit.voice.VoiceDictation
 import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
@@ -330,7 +331,13 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         inputView?.updateEnterKeyLabel(currentInputEditorInfo)
     }
 
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level >= android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND) VoiceDictation.release()
+    }
+
     override fun onDestroy() {
+        VoiceDictation.release()
         InputFeedbackManager.destroy()
         inputView = null
         recreateInputViewPrefs.forEach {
@@ -569,6 +576,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
     ) {
         Timber.d("onStartInputView: restarting=$restarting")
         InputFeedbackManager.startInput()
+        VoiceDictation.preload(this)
         postRimeJob {
             updateRimeOption(this)
         }
@@ -591,6 +599,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
 
     override fun onFinishInputView(finishingInput: Boolean) {
         Timber.d("onFinishInputView: finishingInput=$finishingInput")
+        VoiceDictation.stop()
         decorLocationUpdated = false
         inputView?.dismissCandidateActionMenu()
         candidatesView?.dismissCandidateActionMenu()

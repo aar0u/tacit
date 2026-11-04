@@ -10,6 +10,7 @@ import android.content.Intent
 import android.view.ContextThemeWrapper
 import android.view.KeyEvent
 import android.widget.Toast
+import com.aar0u.tacit.voice.VoiceDictation
 import androidx.lifecycle.lifecycleScope
 import com.osfans.trime.R
 import com.osfans.trime.core.KeyModifiers
@@ -143,7 +144,7 @@ class CommonKeyboardActionListener(override val di: DI) : DIAware {
                         KeyEvent.KEYCODE_SETTINGS -> handleSettings(action)
                         KeyEvent.KEYCODE_PROG_RED -> showColorPicker()
                         KeyEvent.KEYCODE_MENU -> showEnabledSchemaPicker()
-                        KeyEvent.KEYCODE_VOICE_ASSIST -> switchToVoiceInputMethod()
+                        KeyEvent.KEYCODE_VOICE_ASSIST -> VoiceDictation.toggle(service)
                         else -> handleDefaultKeyAction(action)
                     }
                 }

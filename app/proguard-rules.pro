@@ -11,6 +11,9 @@
 # Keep JNI interface
 -keep class com.osfans.trime.core.* { *; }
 
+# sherpa-onnx is called from native code
+-keep class com.k2fsa.sherpa.onnx.** { *; }
+
 # remove kotlin null checks
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkNotNull(...);

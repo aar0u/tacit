@@ -48,6 +48,12 @@ jobs:
           path: "app/prebuilt"
           key: ${{ runner.os }}-tacit-jni-debug-${{ steps.cache-hash.outputs.native-cache-hash }}
 
+      - name: Fetch speech models
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet onnxruntime
+          "$RUNNER_TEMP/venv/bin/python" script/fetch_voice_models.py
+
       - name: Build debug APK
         run: make debug
 
@@ -55,22 +61,11 @@ jobs:
         if: ${{ !steps.jni-cache.outputs.cache-hit }}
         run: cp -R app/build/intermediates/merged_native_libs/debug/mergeDebugNativeLibs/out/lib app/prebuilt
 
-      - name: Fetch speech models
-        run: |
-          python3 -m venv "$RUNNER_TEMP/venv"
-          "$RUNNER_TEMP/venv/bin/pip" install --quiet onnxruntime
-          "$RUNNER_TEMP/venv/bin/python" script/fetch_voice_models.py
-
-      - name: Build voice APK
-        run: ./gradlew :voice:assembleDebug
-
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7
         with:
           name: tacit-debug-arm64-v8a
-          path: |
-            app/build/outputs/apk/debug/*arm64-v8a*.apk
-            voice/build/outputs/apk/debug/voice-debug.apk
+          path: app/build/outputs/apk/debug/*arm64-v8a*.apk
           retention-days: 30
 
       - name: Replace ci-latest release
@@ -85,6 +80,4 @@ jobs:
           name: "CI debug build"
           tag_name: ci-latest
           prerelease: true
-          files: |
-            app/build/outputs/apk/debug/*arm64-v8a*.apk
-            voice/build/outputs/apk/debug/voice-debug.apk
+          files: app/build/outputs/apk/debug/*arm64-v8a*.apk

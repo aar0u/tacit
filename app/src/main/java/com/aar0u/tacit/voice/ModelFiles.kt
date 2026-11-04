@@ -8,9 +8,9 @@ import android.content.Context
 import java.io.File
 
 /**
- * The models ship inside the APK (script/fetch-voice-models.sh puts them in
- * assets/models at build time). sherpa-onnx wants real file paths, so they are
- * copied to private storage once per model version.
+ * The models ship inside the APK (script/fetch_voice_models.py puts them in
+ * assets/voice/models before the build). sherpa-onnx wants real file paths, so
+ * they are copied to private storage once per model version.
  */
 internal object ModelFiles {
     const val VERSION = "x-asr-2026-06-03+silero-vad"
@@ -24,8 +24,9 @@ internal object ModelFiles {
 
     private val ALL = listOf(ENCODER, DECODER, JOINER, TOKENS, BPE, VAD)
     private const val MARKER = "installed-version"
+    private const val ASSET_ROOT = "voice/models"
 
-    fun dir(context: Context) = File(context.filesDir, "models")
+    fun dir(context: Context) = File(context.filesDir, "voice-models")
 
     fun file(context: Context, name: String) = File(dir(context), name)
 
@@ -35,7 +36,7 @@ internal object ModelFiles {
 
     /** True when the APK carries the models; false for a build made without them. */
     fun isBundled(context: Context): Boolean =
-        runCatching { ALL.all { name -> context.assets.open("models/$name").use { true } } }.getOrDefault(false)
+        runCatching { ALL.all { name -> context.assets.open("$ASSET_ROOT/$name").use { true } } }.getOrDefault(false)
 
     fun install(context: Context, onProgress: (done: Int, total: Int) -> Unit = { _, _ -> }) {
         check(isBundled(context)) { "This build does not contain the speech models" }
@@ -46,7 +47,7 @@ internal object ModelFiles {
             val target = file(context, name)
             target.parentFile?.mkdirs()
             val partial = File(target.path + ".part")
-            context.assets.open("models/$name").use { input ->
+            context.assets.open("$ASSET_ROOT/$name").use { input ->
                 partial.outputStream().use { output -> input.copyTo(output, 1 shl 16) }
             }
             check(partial.renameTo(target)) { "Cannot write ${target.path}" }

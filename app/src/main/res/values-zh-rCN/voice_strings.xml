@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2026 Tacit contributors
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<resources>
+    <string name="voice_loading">正在加载语音模型，约需 10 秒…</string>
+    <string name="voice_listening">正在听…</string>
+    <string name="voice_stopped">语音输入已停止</string>
+    <string name="voice_no_models">此安装包不含语音模型</string>
+    <string name="voice_mic_busy">无法打开麦克风（可能被其他应用占用）</string>
+    <string name="voice_failed">语音输入不可用：%1$s</string>
+</resources>

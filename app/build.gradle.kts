@@ -41,6 +41,12 @@ android {
         archivesName = "${android.defaultConfig.applicationId}-$buildVersionName"
     }
 
+    // Speech models are copied out of the APK on first use; storing them
+    // uncompressed keeps that copy fast.
+    androidResources {
+        noCompress += listOf("onnx", "model")
+    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -150,6 +156,7 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.bravh)
     implementation(libs.timber)
+    implementation("com.github.k2-fsa.sherpa-onnx:sherpa-onnx:v1.13.6")
     implementation(libs.xxpermissions)
     implementation(libs.kodein.di)
     implementation(libs.kaml)

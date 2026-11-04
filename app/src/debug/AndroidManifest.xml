@@ -7,7 +7,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <receiver
-            android:name=".DebugTranscribeReceiver"
+            android:name="com.aar0u.tacit.voice.DebugTranscribeReceiver"
             android:exported="true" />
     </application>
 </manifest>

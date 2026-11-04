@@ -28,11 +28,12 @@ English | [简体中文](README_sc.md)
 | CI build of a debug APK | Done |
 | Tacit theme (rounded keys, tinted function keys, simplified labels, dark mode) | In testing |
 | [rime-ice](https://github.com/iDvel/rime-ice) Pinyin dictionary (no grammar model yet) | In testing |
-| Offline voice input: separate app `voice/` (sherpa-onnx, X-ASR, Silero VAD) | In testing |
+| Offline voice input in the keyboard (sherpa-onnx, X-ASR, Silero VAD) | In testing |
+| Key click vibration on by default | In testing |
 
 ## Voice input
 
-Voice is a second app, `com.aar0u.tacit.voice`, so the keyboard needs no microphone permission and the voice app needs no network permission. The keyboard's microphone key switches to it; its "keyboard" button switches back.
+Voice runs inside the keyboard process, so the engine stays loaded and the microphone key (bottom row, where `/` was) starts recording at once. The first start after the process is created loads the model, which takes about 11 seconds. The keyboard asks for the microphone permission the first time you press the key. It still has no `INTERNET` permission, so audio cannot leave the device. The engine is released when Android asks for memory back (about half a gigabyte while loaded).
 
 Speech is cut into sentences by a VAD and each sentence is recognized in one pass. In a desktop comparison on 753 sentences of spoken Mandarin, X-ASR had a character error rate of 5.8%, 3.9% and 8.9% on three talks, against 6.9%, 4.9% and 11.1% for the streaming Zipformer model. On the test phone the whole pipeline ran at 0.19 times real time, and loading the model took about 11 seconds after pre-optimizing the encoder. The cost is that text appears after you pause, not while you speak.
 

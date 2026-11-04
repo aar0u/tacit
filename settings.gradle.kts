@@ -23,4 +23,3 @@ dependencyResolutionManagement {
 rootProject.name = "trime"
 include(":app")
 include(":codegen")
-include(":voice")

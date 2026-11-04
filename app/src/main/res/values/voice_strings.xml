@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2026 Tacit contributors
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<resources>
+    <string name="voice_loading">Loading the speech model, about 10 seconds…</string>
+    <string name="voice_listening">Listening…</string>
+    <string name="voice_stopped">Voice input stopped</string>
+    <string name="voice_no_models">This build does not contain the speech models</string>
+    <string name="voice_mic_busy">Cannot open the microphone (another app may be using it)</string>
+    <string name="voice_failed">Voice input is unavailable: %1$s</string>
+</resources>

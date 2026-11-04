@@ -18,7 +18,8 @@ import kotlin.concurrent.thread
  * Debug builds only: runs the whole VAD + ASR pipeline on a 16 kHz mono 16-bit WAV
  * and logs the text and timings, so accuracy and speed can be checked without a microphone.
  *
- *   adb shell am broadcast -n com.aar0u.tacit.voice/.DebugTranscribeReceiver --es wav /sdcard/test.wav
+ *   adb shell am broadcast -n com.aar0u.tacit.debug/com.aar0u.tacit.voice.DebugTranscribeReceiver --es wav <path>
+ *   (the path must be readable by the app, e.g. its files dir; copy with `adb exec-in run-as ...`)
  *   adb logcat -s TacitVoiceDebug
  */
 class DebugTranscribeReceiver : BroadcastReceiver() {

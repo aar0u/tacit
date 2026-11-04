@@ -1,0 +1,166 @@
+// SPDX-FileCopyrightText: 2026 Tacit contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package com.aar0u.tacit.voice
+
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
+import android.util.Log
+import android.widget.Toast
+import com.osfans.trime.R
+import com.osfans.trime.ime.core.TrimeInputMethodService
+import java.lang.ref.WeakReference
+import java.util.concurrent.Executors
+
+/**
+ * Offline dictation inside the keyboard process. The engine takes about 11 s to
+ * load, so it is loaded once and kept; the keyboard's microphone key then starts
+ * recording at once. Each sentence is typed after a short pause.
+ *
+ * All entry points run on the main thread. Audio capture and decoding run on
+ * their own threads and hand text back through [main].
+ */
+object VoiceDictation {
+    private const val TAG = "TacitVoice"
+
+    private val main = Handler(Looper.getMainLooper())
+    private val worker = Executors.newSingleThreadExecutor { Thread(it, "tacit-voice-worker") }
+
+    @Volatile private var engine: VoiceEngine? = null
+    @Volatile private var recording = false
+    private var loading = false
+    private var startWhenReady = false
+    private var captureThread: Thread? = null
+    private var target = WeakReference<TrimeInputMethodService>(null)
+
+    private fun hasPermission(context: Context) =
+        context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+
+    /** Loads the engine in the background when everything it needs is there. */
+    fun preload(context: Context) {
+        val app = context.applicationContext
+        if (engine != null || loading || !hasPermission(app) || !ModelFiles.isBundled(app)) return
+        loading = true
+        worker.execute {
+            val startedAt = SystemClock.elapsedRealtime()
+            val result = runCatching {
+                if (!ModelFiles.isInstalled(app)) ModelFiles.install(app)
+                VoiceEngine(app)
+            }
+            result.onSuccess { Log.i(TAG, "engine loaded in ${SystemClock.elapsedRealtime() - startedAt} ms") }
+                .onFailure { Log.e(TAG, "engine failed to load", it) }
+            main.post {
+                loading = false
+                result.onSuccess { loaded ->
+                    engine = loaded
+                    val service = target.get()
+                    if (startWhenReady && service != null) startRecording(service)
+                }.onFailure { toast(app, app.getString(R.string.voice_failed, it.message)) }
+                startWhenReady = false
+            }
+        }
+    }
+
+    /** The microphone key: start or stop dictation. */
+    fun toggle(service: TrimeInputMethodService) {
+        target = WeakReference(service)
+        when {
+            recording -> {
+                stop()
+                toast(service, service.getString(R.string.voice_stopped))
+            }
+            !hasPermission(service) -> service.startActivity(
+                Intent(service, VoicePermissionActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+            !ModelFiles.isBundled(service) -> toast(service, service.getString(R.string.voice_no_models))
+            engine == null -> {
+                startWhenReady = true
+                toast(service, service.getString(R.string.voice_loading))
+                preload(service)
+            }
+            else -> startRecording(service)
+        }
+    }
+
+    /** Ends recording; the sentence still being spoken is finished and typed. */
+    fun stop() {
+        startWhenReady = false
+        recording = false
+    }
+
+    /** Frees the engine (about half a gigabyte) when the system is short of memory. */
+    fun release() {
+        stop()
+        val thread = captureThread
+        val old = engine
+        engine = null
+        worker.execute {
+            thread?.join(2000)
+            old?.release()
+        }
+    }
+
+    private fun startRecording(service: TrimeInputMethodService) {
+        val active = engine ?: return
+        val minBuffer = AudioRecord.getMinBufferSize(
+            VoiceEngine.SAMPLE_RATE,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+        )
+        val recorder = AudioRecord(
+            MediaRecorder.AudioSource.VOICE_RECOGNITION,
+            VoiceEngine.SAMPLE_RATE,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            maxOf(minBuffer, VoiceEngine.SAMPLE_RATE * 2 * 4),
+        )
+        if (recorder.state != AudioRecord.STATE_INITIALIZED) {
+            recorder.release()
+            toast(service, service.getString(R.string.voice_mic_busy))
+            return
+        }
+        recording = true
+        toast(service, service.getString(R.string.voice_listening))
+        captureThread = Thread({ capture(recorder, active) }, "tacit-voice-capture").also { it.start() }
+    }
+
+    private fun capture(recorder: AudioRecord, active: VoiceEngine) {
+        val pcm = ShortArray(VoiceEngine.WINDOW_SAMPLES)
+        val window = FloatArray(VoiceEngine.WINDOW_SAMPLES)
+        try {
+            recorder.startRecording()
+            while (recording) {
+                if (recorder.read(pcm, 0, pcm.size) < pcm.size) continue
+                for (i in pcm.indices) window[i] = pcm[i] / 32768f
+                active.accept(window).forEach(::typeLater)
+            }
+            active.flush().forEach(::typeLater)
+        } finally {
+            recorder.stop()
+            recorder.release()
+        }
+    }
+
+    private fun typeLater(samples: FloatArray) {
+        worker.execute {
+            val startedAt = SystemClock.elapsedRealtime()
+            val text = runCatching { engine?.transcribe(samples).orEmpty() }
+                .onFailure { Log.e(TAG, "transcribe failed", it) }
+                .getOrDefault("")
+            Log.i(TAG, "decoded ${samples.size / 16} ms of audio in ${SystemClock.elapsedRealtime() - startedAt} ms")
+            if (text.isNotEmpty()) main.post { target.get()?.commitText(text) }
+        }
+    }
+
+    private fun toast(context: Context, message: String) =
+        Toast.makeText(context.applicationContext, message, Toast.LENGTH_SHORT).show()
+}
