@@ -111,6 +111,7 @@ preset_color_schemes:
     func_key_hilited_color: 0x7d67bd
 
 preset_keys:
+  VOICE_ASSIST: {label: 语音, send: VOICE_ASSIST}
   Hide: {label: 隐藏, send: BACK}
   BackSpace: {label: 退格, repeatable: true, send: BackSpace}
   select_all: {label: 全选, send: Control+a}
@@ -164,5 +165,5 @@ preset_keyboards:
     - {click: ',', long_click: '<'}
     - {click: space, width: 30}
     - {click: '.', long_click: '>'}
-    - {click: '/', long_click: '?'}
+    - {click: VOICE_ASSIST, long_click: '/', swipe_up: '?'}
     - {click: Return, composing: Return1, long_click: CommitComment, width: 15, key_back_color: func_key_back_color, key_text_color: func_key_text_color, hilited_key_back_color: func_key_hilited_color}

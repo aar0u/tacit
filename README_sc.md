@@ -27,8 +27,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
 | 构建出的 APK 没有 `INTERNET` 和 `RECORD_AUDIO` 权限 | 已在真机验证 |
 | CI 构建调试版 APK | 已完成 |
 | Tacit 主题（圆角按键、功能键着色、简体标签、深色模式） | 测试中 |
-| 接入 [雾凇拼音](https://github.com/iDvel/rime-ice) 词库和语法模型 | 计划中 |
-| 离线语音输入（sherpa-onnx，VAD 加整句识别） | 计划中 |
+| 接入 [雾凇拼音](https://github.com/iDvel/rime-ice) 词库（暂无语法模型） | 测试中 |
+| 离线语音输入：独立应用 `voice/`（sherpa-onnx、X-ASR、Silero VAD） | 测试中 |
+
+## 语音输入
+
+语音是第二个应用 `com.aar0u.tacit.voice`：键盘不需要麦克风权限，语音应用不需要联网权限。键盘上的麦克风键切换到它，它的"返回键盘"按钮切换回来。
+
+语音先由 VAD 切成句子，每句一次识别。在 753 句普通话口语的桌面对比中，X-ASR 在三段演讲上的字错率是 5.8%、3.9%、8.9%，流式 Zipformer 是 6.9%、4.9%、11.1%。在测试手机上整个流程的速度是实时的 0.19 倍，预优化编码器后加载模型约 11 秒。代价是停顿之后才出字，不是边说边出。
+
+模型约 175 MB，不放进 git。`script/fetch_voice_models.py` 负责下载、校验 SHA-256 并预优化编码器，CI 构建前会运行它。
 
 ## 下载
 

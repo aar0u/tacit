@@ -108,7 +108,7 @@ class AppPrefs(
         val preferredVoiceInput = list(
             R.string.preferred_voice_input,
             PREFERRED_VOICE_INPUT,
-            "",
+            "com.aar0u.tacit.voice",
             { InputMethodUtils.voiceInputMethods().map { it.first.packageName } },
             { ctx ->
                 InputMethodUtils.voiceInputMethods().map { it.first.loadLabel(ctx.packageManager) }
