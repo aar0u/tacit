@@ -24,8 +24,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
 | 项目 | 状态 |
 |---|---|
 | 改名（`com.aar0u.tacit`，应用名 Tacit） | 已完成 |
-| 删除未使用的权限（`RECEIVE_BOOT_COMPLETED`） | 已完成 |
+| 构建出的 APK 没有 `INTERNET` 和 `RECORD_AUDIO` 权限 | 已在真机验证 |
 | CI 构建调试版 APK | 已完成 |
+| Tacit 主题（圆角按键、功能键着色、简体标签、深色模式） | 测试中 |
 | 接入 [雾凇拼音](https://github.com/iDvel/rime-ice) 词库和语法模型 | 计划中 |
 | 离线语音输入（sherpa-onnx，VAD 加整句识别） | 计划中 |
 

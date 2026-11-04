@@ -24,8 +24,9 @@ English | [简体中文](README_sc.md)
 | Item | State |
 |---|---|
 | Rebrand (`com.aar0u.tacit`, app name Tacit) | Done |
-| Unused permission removed (`RECEIVE_BOOT_COMPLETED`) | Done |
+| No `INTERNET` and no `RECORD_AUDIO` permission in the built APK | Verified on device |
 | CI build of a debug APK | Done |
+| Tacit theme (rounded keys, tinted function keys, simplified labels, dark mode) | In testing |
 | [rime-ice](https://github.com/iDvel/rime-ice) dictionary and grammar model | Planned |
 | Offline voice input (sherpa-onnx, whole-sentence recognition with VAD) | Planned |
 
