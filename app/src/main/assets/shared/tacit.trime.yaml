@@ -349,7 +349,7 @@ liquid_keyboard:
     keys: "āáǎàōóēéěèǒòīíǐìūúǖǘǚǜǔùêếüńňǹㄚㄛㄜㄧㄨㄩㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ"
 
 # The bar above the keys: menu, hide, emoji, clipboard history, cursor and selection
-# keys, voice and the Chinese/English switch. Icons come from the bundled icon font.
+# keys and voice. Icons come from the bundled icon font.
 tool_bar:
   button_spacing: 6
   button_font: iconfont.ttf
@@ -376,7 +376,8 @@ tool_bar:
       action: clipboard_window
     - foreground: {style: "ic@cursor_move", normal: candidate_text_color}
       action: Keyboard_editor
-  # No voice or 中/En button here: the bottom row of the keyboard already has both.
+    - foreground: {option_styles: ["ic@microphone_outline", "ic@microphone"], normal: candidate_text_color}
+      action: VOICE_ASSIST
 
 preset_keys:
   BackSpace_text: {label: 退格, repeatable: true, send: BackSpace}
@@ -476,16 +477,14 @@ preset_keyboards:
     - {click: 'n', swipe_up: '》', label_symbol: '》', long_click: {commit: '>'}, hint: '>'}
     - {click: 'm', swipe_up: '？', label_symbol: '？', long_click: {commit: '?'}, hint: '?'}
     - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15}
-    - {click: Keyboard_symbols, width: 9}
-    - {click: Keyboard_number, width: 9}
+    - {click: Keyboard_symbols, long_click: Keyboard_number, width: 12}
+    # Smaller than the letters, so the 中/EN key does not outshine them.
+    - {click: Mode_switch, long_click: Menu, key_text_size: 16, width: 12}
     # The key shows the Chinese mark it types; the corner shows the half-width one, which a
     # swipe up or a long press commits (CyIME takes both as well).
-    - {click: ',', label: '，', label_symbol: ',', swipe_up: {commit: ','}, long_click: {commit: ','}, width: 9}
-    - {click: space, long_click: VOICE_HOLD, width: 28}
-    - {click: '.', label: '。', label_symbol: '.', swipe_up: {commit: '.'}, long_click: {commit: '.'}, width: 9}
-    # Smaller than the letters, so the voice and 中/EN keys do not outshine them.
-    - {click: VOICE_ASSIST, key_text_size: 16, width: 10}
-    - {click: Mode_switch, long_click: Menu, key_text_size: 16, width: 11}
+    - {click: ',', label: '，', label_symbol: ',', swipe_up: {commit: ','}, long_click: {commit: ','}, width: 12}
+    - {click: space, long_click: VOICE_HOLD, width: 39}
+    - {click: '.', label: '。', label_symbol: '.', swipe_up: {commit: '.'}, long_click: {commit: '.'}, width: 10}
     - {click: Return, composing: Return1, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
   # Until rime_ice has been deployed (about three minutes after a fresh install) the
   # active schema is another one, and Trime then falls back to these layouts. Tacit has
