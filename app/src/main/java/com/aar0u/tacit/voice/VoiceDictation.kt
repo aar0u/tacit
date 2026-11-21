@@ -50,10 +50,30 @@ object VoiceDictation {
     private var captureThread: Thread? = null
     private var target = WeakReference<TrimeInputMethodService>(null)
 
+    /** DECODING: the microphone is off, but the last sentences are still being turned into text. */
+    enum class Phase { IDLE, LISTENING, DECODING }
+
+    // Sentences handed to the worker that have not been typed yet. Main thread only.
+    private var pending = 0
+    private var shown = Phase.IDLE
+
     val isRecording: Boolean get() = recording
 
-    /** Called on the main thread whenever recording starts or stops, so the keys can redraw. */
+    val phase: Phase
+        get() = when {
+            recording -> Phase.LISTENING
+            captureThread != null || pending > 0 -> Phase.DECODING
+            else -> Phase.IDLE
+        }
+
+    /** Called on the main thread whenever the [phase] changes, so the keys can redraw. */
     var onStateChanged: ((Boolean) -> Unit)? = null
+
+    private fun publish() {
+        if (phase == shown) return
+        shown = phase
+        onStateChanged?.invoke(recording)
+    }
 
     private fun hasPermission(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
@@ -93,6 +113,9 @@ object VoiceDictation {
                 stop()
                 toast(service, R.string.voice_stopped)
             }
+            // The capture loop reads `recording`; starting again before it has finished flushing
+            // would keep the old loop alive next to a second one on the same engine.
+            captureThread != null -> Unit
             !hasPermission(service) -> service.startActivity(
                 Intent(service, VoicePermissionActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
             )
@@ -139,7 +162,7 @@ object VoiceDictation {
     private fun setRecording(on: Boolean) {
         if (recording == on) return
         recording = on
-        onStateChanged?.invoke(on)
+        publish()
     }
 
     private fun startRecording(service: TrimeInputMethodService) {
@@ -180,17 +203,29 @@ object VoiceDictation {
         } finally {
             recorder.stop()
             recorder.release()
+            // Queued after every typeLater of this run, so the phase never dips to IDLE early.
+            main.post {
+                captureThread = null
+                publish()
+            }
         }
     }
 
     private fun typeLater(samples: FloatArray) {
-        worker.execute {
-            val startedAt = SystemClock.elapsedRealtime()
-            val text = runCatching { engine?.transcribe(samples).orEmpty() }
-                .onFailure { Log.e(TAG, "transcribe failed", it) }
-                .getOrDefault("")
-            Log.i(TAG, "decoded ${samples.size / 16} ms of audio in ${SystemClock.elapsedRealtime() - startedAt} ms")
-            if (text.isNotEmpty()) main.post { target.get()?.commitText(text) }
+        main.post {
+            pending++
+            worker.execute {
+                val startedAt = SystemClock.elapsedRealtime()
+                val text = runCatching { engine?.transcribe(samples).orEmpty() }
+                    .onFailure { Log.e(TAG, "transcribe failed", it) }
+                    .getOrDefault("")
+                Log.i(TAG, "decoded ${samples.size / 16} ms of audio in ${SystemClock.elapsedRealtime() - startedAt} ms")
+                main.post {
+                    pending--
+                    if (text.isNotEmpty()) target.get()?.commitText(text)
+                    publish()
+                }
+            }
         }
     }
 

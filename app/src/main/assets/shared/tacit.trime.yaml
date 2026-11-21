@@ -17,8 +17,8 @@ __include: trime:/
 
 style:
   round_corner: 12
-  horizontal_gap: 5
-  vertical_gap: 9
+  horizontal_gap: 3
+  vertical_gap: 6
   key_text_size: 24
   key_long_text_size: 16
   symbol_text_size: 11
@@ -40,6 +40,10 @@ style:
 fallback_colors:
   on_key_back_color: enter_key_back_color
   on_key_text_color: enter_key_text_color
+  # The hint above the space bar (录音中) is drawn on the lit key; the built-in default is the
+  # dark pressed-key symbol color, which is hard to read on the enter key color.
+  on_key_symbol_color: enter_key_text_color
+  hilited_on_key_symbol_color: enter_key_text_color
 
 preset_color_schemes:
   default:
@@ -405,7 +409,8 @@ preset_keys:
   # lights these keys up while recording (Key.appearanceType).
   VOICE_ASSIST: {toggle: _voice_input, send: VOICE_ASSIST, functional: true, states: [ "ic@microphone_outline", "ic@microphone" ]}
   # Long press on the space bar: record while held.
-  VOICE_HOLD: {label: 按住说话, send: VOICE_ASSIST, option: hold}
+  # The hint above the space bar follows the voice phase: idle, listening, decoding.
+  VOICE_HOLD: {toggle: _voice_input, send: VOICE_ASSIST, option: hold, states: [按住说话, 录音中, 识别中]}
   # The key lights up while recording (see Key.appearanceType), so its label stays.
   space: {label: '␣', send: space, repeatable: false, functional: false}
   # Functional keys take the off_key_* colors of the color scheme.
@@ -477,15 +482,15 @@ preset_keyboards:
     - {click: 'n', swipe_up: '》', label_symbol: '》', long_click: {commit: '>'}, hint: '>'}
     - {click: 'm', swipe_up: '？', label_symbol: '？', long_click: {commit: '?'}, hint: '?'}
     - {click: BackSpace, long_click: Clear, swipe_left: Escape, width: 15}
-    - {click: Keyboard_symbols, long_click: Keyboard_number, width: 12}
-    # Smaller than the letters, so the 中/EN key does not outshine them.
-    - {click: Mode_switch, long_click: Menu, key_text_size: 16, width: 12}
+    - {click: Keyboard_symbols, long_click: Keyboard_number, width: 10}
     # The key shows the Chinese mark it types; the corner shows the half-width one, which a
     # swipe up or a long press commits (CyIME takes both as well).
-    - {click: ',', label: '，', label_symbol: ',', swipe_up: {commit: ','}, long_click: {commit: ','}, width: 12}
-    - {click: space, long_click: VOICE_HOLD, width: 39}
+    - {click: ',', label: '，', label_symbol: ',', swipe_up: {commit: ','}, long_click: {commit: ','}, width: 10}
+    # Smaller than the letters, so the 中/EN key does not outshine them.
+    - {click: Mode_switch, long_click: Menu, key_text_size: 16, width: 10}
+    - {click: space, long_click: VOICE_HOLD, width: 42}
     - {click: '.', label: '。', label_symbol: '.', swipe_up: {commit: '.'}, long_click: {commit: '.'}, width: 10}
-    - {click: Return, composing: Return1, width: 15, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+    - {click: Return, composing: Return1, width: 18, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
   # Until rime_ice has been deployed (about three minutes after a fresh install) the
   # active schema is another one, and Trime then falls back to these layouts. Tacit has
   # only the one letter layout, so all of them are the same.
@@ -600,9 +605,11 @@ preset_keyboards:
     - {click: '，', ascii: ',', long_click: one_hand_switch_1}
     - {click: '？', ascii: '?', long_click: one_hand_switch_2}
     - {click: BackSpace, long_click: Clear}
-    - {click: Keyboard_default, long_click: Menu, key_text_size: 14, width: 12}
-    - {click: Keyboard_number, long_click: Color_switch, key_text_size: 14, width: 12}
-    - {click: space, width: 30}
-    - {click: '。', ascii: '.', width: 12}
-    - {click: liquid_keyboard_switch, long_click: Delete, key_text_size: 14, width: 12}
-    - {click: Return, width: 22, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}
+    # Same slots and widths as the bottom row of the letter keyboard, so only the labels
+    # change when switching: 10, 10, 10, space 42, 10, enter 18.
+    - {click: Keyboard_default, long_click: Menu, key_text_size: 14, width: 10}
+    - {click: Keyboard_number, long_click: Color_switch, key_text_size: 14, width: 10}
+    - {click: liquid_keyboard_switch, long_click: Delete, key_text_size: 14, width: 10}
+    - {click: space, width: 42}
+    - {click: '。', ascii: '.', width: 10}
+    - {click: Return, width: 18, key_back_color: enter_key_back_color, key_text_color: enter_key_text_color}

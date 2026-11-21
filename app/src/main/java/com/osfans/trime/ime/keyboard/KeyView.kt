@@ -415,7 +415,16 @@ class KeyView(
                 isTop -> width - paddingRight - sp(CORNER_INSET)
                 else -> paddingLeft + sp(CORNER_INSET)
             }
-            val startY = if (isTop) {
+            val startY = if (corner) {
+                // Place by the drawn glyph, not the font box: ( [ _ | reach past the descent
+                // and were clipped at the key edge.
+                val ink = Rect().also { symbolPaint.getTextBounds(text, 0, text.length, it) }
+                if (isTop) {
+                    paddingTop + sp(CORNER_INSET) - ink.top + sp(offsetY)
+                } else {
+                    height - paddingBottom - sp(CORNER_INSET) - ink.bottom + sp(offsetY)
+                }
+            } else if (isTop) {
                 paddingTop - fontMetrics.top + sp(offsetY) - (totalHeight - lineHeight) / 2
             } else {
                 height - paddingBottom - fontMetrics.bottom + sp(offsetY) - (totalHeight - lineHeight) / 2
